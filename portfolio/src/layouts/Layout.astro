@@ -10,8 +10,8 @@ interface Props {
 }
 
 const {
-  title = 'Warquah Faiz — Software Developer',
-  description = 'Warquah Faiz — student developer and AI builder working on desktop applications and developer tools. Performance, privacy and simplicity.',
+  title = 'Warquah Faiz — Student Developer',
+  description = 'Warquah Faiz — student developer exploring how software works. Building software, studying systems, documenting what I learn.',
 } = Astro.props;
 ---
 
@@ -25,6 +25,18 @@ const {
     <meta name="description" content={description} />
     <title>{title}</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    {Astro.site && (
+      <>
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:image" content={new URL('/og-image.png', Astro.site)} />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content={new URL('/og-image.png', Astro.site)} />
+      </>
+    )}
   </head>
   <body>
     <Loader client:load />
@@ -34,7 +46,9 @@ const {
         <span class="mono" style="font-size: var(--step--1); color: var(--ink-faint); writing-mode: vertical-rl;">W</span>
         <div class="gutter-line">
           <div class="gutter-ticks" id="gutter-ticks">
-            {sections.slice(1).map((s) => (
+            {/* Scroll-spy ticks only apply to same-page anchors — routes
+                like /notes have no in-page target to observe. */}
+            {sections.slice(1).filter((s) => s.href.startsWith('#')).map((s) => (
               <div class="gutter-tick" data-target={s.href}>
                 <div class="gutter-mark"></div>
               </div>

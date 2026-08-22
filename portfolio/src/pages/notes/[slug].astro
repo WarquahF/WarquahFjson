@@ -1,0 +1,123 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const notes = await getCollection('notes');
+  return notes.map((note) => ({
+    params: { slug: note.slug },
+    props: { note },
+  }));
+}
+
+const note = Astro.props.note;
+const { Content } = await note.render();
+---
+
+<Layout title={`${note.data.title} — Notes`} description={note.data.summary}>
+  <Nav />
+  <article class="section">
+    <div class="section-inner container">
+      <p class="eyebrow"><span class="path">/notes/{note.slug}</span></p>
+      <h1>{note.data.title}</h1>
+      <p class="meta mono">
+        <span>{note.data.date.toISOString().slice(0, 10)}</span>
+        {note.data.tags && (
+          <span class="tags">{note.data.tags.join(' · ')}</span>
+        )}
+      </p>
+
+      <div class="prose">
+        <Content />
+      </div>
+
+      <p class="mono back-link">
+        <a href="/notes">&larr; All notes</a>
+      </p>
+    </div>
+  </article>
+  <Footer />
+</Layout>
+
+<style>
+  h1 {
+    font-size: var(--step-3);
+    max-width: 24ch;
+  }
+
+  .meta {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 0.9rem;
+    font-size: var(--step--1);
+    color: var(--ink-faint);
+  }
+
+  .tags {
+    color: var(--ink-faint);
+  }
+
+  /* Body copy in the site body font; headings inherit the display serif
+     from the global h2/h3 rules. */
+  .prose {
+    margin-top: 2.5rem;
+  }
+
+  .prose :global(li) {
+    color: var(--ink-dim);
+    max-width: 60ch;
+    margin: 0.4rem 0;
+  }
+
+  .prose :global(strong) {
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .prose :global(a) {
+    color: var(--signal);
+  }
+
+  .prose :global(code) {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    background: color-mix(in srgb, var(--bg-raised) 70%, transparent);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 0.05em 0.35em;
+  }
+
+  .prose :global(pre) {
+    background: var(--bg-raised);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 0.9rem 1.1rem;
+    overflow-x: auto;
+  }
+
+  .prose :global(pre code) {
+    background: none;
+    border: none;
+    padding: 0;
+  }
+
+  .back-link {
+    margin-top: 3rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--line);
+    font-size: var(--step--1);
+  }
+
+  .back-link a {
+    color: var(--ink-dim);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .back-link a:hover {
+    color: var(--signal);
+  }
+</style>

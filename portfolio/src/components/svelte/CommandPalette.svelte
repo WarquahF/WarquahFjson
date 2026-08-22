@@ -28,6 +28,10 @@
     { label: 'GitHub', hint: 'link', action: () => window.open(social.github, '_blank') },
     { label: 'Email', hint: 'link', action: () => (window.location.href = `mailto:${social.email}`) },
     { label: 'X', hint: 'link', action: () => window.open(social.x, '_blank') },
+    // TODO(placeholder): no résumé file yet — opens the visitor's mail
+    // client. Swap for a real link (e.g. window.open('/resume.pdf','_blank'))
+    // once one exists.
+    { label: 'Résumé — email for now', hint: 'link', action: () => (window.location.href = `mailto:${social.email}`) },
   ];
 
   $: filtered = query
@@ -36,8 +40,20 @@
 
   $: if (activeIndex >= filtered.length) activeIndex = Math.max(0, filtered.length - 1);
 
+  // Sections mix same-page anchors (#about) and routes (/notes). Anchors
+  // only exist on the home page — from any other route, jump to the
+  // rooted URL instead of scrolling. Routes navigate directly.
   function goTo(href: string) {
-    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+    if (href.startsWith('#')) {
+      const target = document.querySelector(href);
+      if (!target) {
+        window.location.assign(`/${href}`);
+      } else {
+        target.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      window.location.assign(href);
+    }
     close();
   }
 

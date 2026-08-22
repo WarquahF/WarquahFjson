@@ -1,0 +1,83 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import { getCollection } from 'astro:content';
+
+const notes = (await getCollection('notes')).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+---
+
+<Layout title="Notes — Warquah Faiz" description="Short dev log: what I'm building and what I'm learning, written as I go.">
+  <Nav />
+  <section class="section">
+    <div class="section-inner">
+      <p class="eyebrow"><span class="path">/notes</span></p>
+      <h2>Dev log</h2>
+      <p style="margin-top: 0.75rem;">
+        Short entries on what I'm building and what I'm learning. Written as
+        I go, not after the fact.
+      </p>
+
+      <ul class="note-list mono">
+        {notes.map((note, i) => (
+          <li>
+            <a href={`/notes/${note.slug}/`}>
+              <span class="note-index">{String(i + 1).padStart(2, '0')}</span>
+              <span class="note-title">{note.data.title}</span>
+              <span class="note-date">{note.data.date.toISOString().slice(0, 10)}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+  <Footer />
+</Layout>
+
+<style>
+  /* Mirrors the /archive list pattern in Projects.astro */
+  .note-list {
+    list-style: none;
+    margin: 3rem 0 0;
+    padding: 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .note-list li {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .note-list a {
+    display: flex;
+    gap: 1rem;
+    align-items: baseline;
+    padding: 0.75rem 0;
+    font-size: var(--step--1);
+    color: var(--ink-dim);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .note-list a:hover {
+    color: var(--ink);
+  }
+
+  .note-index {
+    color: var(--ink-faint);
+  }
+
+  .note-title {
+    color: inherit;
+  }
+
+  .note-list a:hover .note-title {
+    color: var(--signal);
+  }
+
+  .note-date {
+    margin-left: auto;
+    color: var(--ink-faint);
+  }
+</style>

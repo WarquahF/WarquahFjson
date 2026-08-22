@@ -5,7 +5,8 @@ export const sections: NavItem[] = [
   { label: 'About', href: '#about', index: '01' },
   { label: 'Projects', href: '#projects', index: '02' },
   { label: 'Status', href: '#status', index: '03' },
-  { label: 'Contact', href: '#contact', index: '04' },
+  { label: 'Notes', href: '/notes', index: '04' },
+  { label: 'Contact', href: '#contact', index: '05' },
 ];
 
 export const social = {

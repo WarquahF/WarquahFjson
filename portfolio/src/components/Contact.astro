@@ -7,8 +7,8 @@ import { social } from '../data/nav';
     <p class="eyebrow"><span class="path">/contact</span></p>
     <h2 data-text-reveal>Get in touch</h2>
     <p style="margin-top: 0.75rem;">
-      Open to projects, collaborations and conversations about AI-powered
-      software.
+      Open to projects, collaborations and conversations about software
+      and systems.
     </p>
 
     <div class="contact-links mono">
@@ -23,6 +23,12 @@ import { social } from '../data/nav';
       <a href={social.x} target="_blank" rel="noreferrer">
         <span class="contact-label">X</span>
         <span class="contact-value">@warquah35</span>
+      </a>
+      <!-- TODO(placeholder): no résumé file yet — this row points at email.
+           Swap the href for a real file/URL (e.g. /resume.pdf) once one exists. -->
+      <a href={`mailto:${social.email}`}>
+        <span class="contact-label">Résumé — email for now</span>
+        <span class="contact-value">{social.email}</span>
       </a>
     </div>
 

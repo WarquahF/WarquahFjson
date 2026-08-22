@@ -1,0 +1,60 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+
+const path = Astro.url.pathname;
+---
+
+<Layout title="404 — Route not found" description="The requested route doesn't exist on this site.">
+  <Nav />
+  <section class="section">
+    <div class="section-inner container">
+      <p class="eyebrow"><span class="path">/404</span></p>
+      <h2>Route not found.</h2>
+      <p class="mono request-line">
+        <span class="prompt">$</span> GET {path} <span class="code">→ 404</span>
+      </p>
+      <p>
+        The page you asked for isn't here. It may have moved, or never
+        shipped. Everything that does exist is one click away.
+      </p>
+      <p class="mono back-link">
+        <a href="/">&larr; Back to /home</a>
+      </p>
+    </div>
+  </section>
+  <Footer />
+</Layout>
+
+<style>
+  .request-line {
+    margin-top: 1.75rem;
+    font-size: var(--step--1);
+    color: var(--ink-dim);
+    letter-spacing: 0.02em;
+  }
+
+  .request-line .prompt {
+    color: var(--signal);
+  }
+
+  .request-line .code {
+    color: var(--ink-faint);
+  }
+
+  .back-link {
+    margin-top: 2rem;
+    font-size: var(--step--1);
+  }
+
+  .back-link a {
+    color: var(--ink-dim);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .back-link a:hover {
+    color: var(--signal);
+  }
+</style>

@@ -1,16 +1,23 @@
 ---
 import { sections, social } from '../data/nav';
+
+// Sections mix same-page anchors (#about) and routes (/notes). Anchors
+// only resolve on the home page — from any other route they must be
+// rooted (/#about) to land in the right place.
+const isHome = Astro.url.pathname === '/';
+const linkFor = (href: string) =>
+  !isHome && href.startsWith('#') ? `/${href}` : href;
 ---
 
 <header class="nav glass">
-  <a class="nav-mark mono" href="#home" aria-label="Home">
+  <a class="nav-mark mono" href={linkFor('#home')} aria-label="Home">
     <span class="nav-mark-box">W</span>
     <span class="nav-mark-name">WARQUAH FAIZ</span>
   </a>
 
   <nav class="nav-links mono" aria-label="Primary">
     {sections.slice(1).map((s) => (
-      <a href={s.href}>{s.label}</a>
+      <a href={linkFor(s.href)}>{s.label}</a>
     ))}
   </nav>
 

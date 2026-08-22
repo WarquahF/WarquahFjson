@@ -1,6 +1,8 @@
 ---
 import { social } from '../data/nav';
 const year = new Date().getFullYear();
+// #home only resolves on the home page — root it everywhere else.
+const homeHref = Astro.url.pathname === '/' ? '#home' : '/#home';
 ---
 
 <footer class="footer mono">
@@ -9,7 +11,7 @@ const year = new Date().getFullYear();
     <a href={social.github} target="_blank" rel="noreferrer">GitHub</a>
     <a href={social.x} target="_blank" rel="noreferrer">X</a>
     <a href={`mailto:${social.email}`}>Email</a>
-    <a href="#home">Back to top ↑</a>
+    <a href={homeHref}>Back to top ↑</a>
   </div>
 </footer>
 

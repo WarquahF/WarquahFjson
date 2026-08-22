@@ -1,5 +1,45 @@
 ---
-const focus = ['AI Systems', 'Rust', 'Desktop Applications', 'Frontend Engineering'];
+const focus = ['Systems', 'Rust', 'Desktop Applications', 'Frontend Engineering'];
+
+// Last commit on the Blink repo, fetched at BUILD time (this frontmatter
+// only runs when the static site is generated). The request is
+// UNAUTHENTICATED and subject to GitHub's public rate limit (60 req/hour
+// per IP), so it can fail on rate-limited CI runners or private/renamed
+// repos — in that case the line below is simply omitted; visitors never
+// see an error. Note the relative time is frozen at deploy time.
+let lastCommit: { when: string; message: string } | null = null;
+try {
+  const res = await fetch('https://api.github.com/repos/WarquahF/Blink/commits/main', {
+    headers: { Accept: 'application/vnd.github+json' },
+  });
+  if (res.ok) {
+    const data = await res.json();
+    const date = new Date(data.commit.author.date);
+    const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
+    const units: [number, string][] = [
+      [60, 'second'],
+      [60, 'minute'],
+      [24, 'hour'],
+      [30, 'day'],
+      [12, 'month'],
+    ];
+    let value = seconds;
+    let unit = 'second';
+    for (const [size, name] of units) {
+      if (Math.abs(value) < size) break;
+      value = Math.round(value / size);
+      unit = name;
+    }
+    lastCommit = {
+      when: `${value} ${unit}${Math.abs(value) === 1 ? '' : 's'} ago`,
+      message:
+        data.commit.message.split('\n')[0].slice(0, 60) +
+        (data.commit.message.length > 60 ? '…' : ''),
+    };
+  }
+} catch {
+  // Network failure, rate limit, unknown repo — render nothing.
+}
 ---
 
 <section class="section" id="status" data-reveal>
@@ -12,6 +52,9 @@ const focus = ['AI Systems', 'Rust', 'Desktop Applications', 'Frontend Engineeri
         <p class="mono status-label">Building</p>
         <p class="text-ink status-value">Blink</p>
         <p class="status-sub">Local-first AI assistant · Tauri migration</p>
+        {lastCommit && (
+          <p class="mono status-sub">Last commit — {lastCommit.when} — {lastCommit.message}</p>
+        )}
       </div>
 
       <div class="status-block">

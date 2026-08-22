@@ -15,13 +15,11 @@ npm run preview   # preview the build
 
 ## Fonts
 
-`src/styles/global.css` references three self-hosted variable fonts that
-aren't included in this export (keep the repo dependency-light and license-
-clean — download them yourself):
+Self-hosted fonts live in `public/fonts/`:
 
 - `/public/fonts/fraunces-variable.woff2` — [Fraunces](https://fonts.google.com/specimen/Fraunces), variable, weights 300–700
 - `/public/fonts/inter-variable.woff2` — [Inter](https://fonts.google.com/specimen/Inter), variable, weights 400–600
-- `/public/fonts/plex-mono.woff2` — [IBM Plex Mono](https://fonts.google.com/specimen/IBM+Plex+Mono), regular + medium
+- `/public/fonts/plex-mono-regular.woff2` + `/public/fonts/plex-mono-medium.woff2` — [IBM Plex Mono](https://fonts.google.com/specimen/IBM+Plex+Mono), regular + medium (static weights; no variable woff2 available)
 
 Google Webfonts Helper (gwfh.mranftl.com) is the fastest way to grab
 self-hostable woff2 files for all three. Drop them in `public/fonts/` and

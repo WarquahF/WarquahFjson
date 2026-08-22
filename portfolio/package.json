@@ -7,14 +7,18 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "og": "node scripts/generate-og.mjs"
   },
   "dependencies": {
+    "@astrojs/sitemap": "^3.4.1",
+    "@astrojs/svelte": "^5.7.0",
     "astro": "^4.15.0",
-    "svelte": "^4.2.19",
-    "@astrojs/svelte": "^5.7.0"
+    "svelte": "^4.2.19"
   },
   "devDependencies": {
-    "typescript": "^5.5.4"
+    "@resvg/resvg-js": "^2.6.2",
+    "typescript": "^5.5.4",
+    "wawoff2": "^2.0.1"
   }
 }

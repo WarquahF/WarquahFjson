@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <!-- Open Graph card — mirrors site tokens from src/styles/global.css:
+       bg #0b0b0d, ink #ededef, dim #8b8b93, faint #59585f,
+       signal amber #d9a65c, hairlines #232228 / #34333b.
+       Fraunces (display serif) + IBM Plex Mono. Flat fills only. -->
+  <rect width="1200" height="630" fill="#0b0b0d"/>
+
+  <!-- left document-gutter echo -->
+  <line x1="96" y1="96" x2="96" y2="534" stroke="#232228" stroke-width="2"/>
+  <circle cx="96" cy="96" r="5" fill="#d9a65c"/>
+  <circle cx="96" cy="315" r="3" fill="#34333b"/>
+  <circle cx="96" cy="534" r="3" fill="#34333b"/>
+
+  <!-- name -->
+  <text x="150" y="308" font-family="Fraunces, Georgia, serif" font-size="92" font-weight="480" letter-spacing="-1" fill="#ededef">WARQUAH FAIZ</text>
+
+  <!-- tagline -->
+  <text x="152" y="384" font-family="IBM Plex Mono, Menlo, monospace" font-size="28" fill="#8b8b93">Building software. Studying systems.</text>
+  <text x="152" y="426" font-family="IBM Plex Mono, Menlo, monospace" font-size="28" fill="#8b8b93">Documenting what I learn.</text>
+
+  <!-- handle -->
+  <text x="152" y="562" font-family="IBM Plex Mono, Menlo, monospace" font-size="21" fill="#59585f">github.com/WarquahF</text>
+</svg>
