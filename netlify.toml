@@ -1,0 +1,14 @@
+# Netlify build configuration — lives at the REPO ROOT.
+# The project (package.json / astro.config.mjs) is inside portfolio/.
+# File-based config takes precedence over the Netlify UI build settings,
+# so these values win no matter what the dashboard form contains.
+
+[build]
+  base = "portfolio"
+  command = "npm run build"
+  # Publish path is resolved from the repo root (Netlify monorepo
+  # convention), hence the portfolio/ prefix even though base is set.
+  publish = "portfolio/dist"
+
+[build.environment]
+  NODE_VERSION = "20"
