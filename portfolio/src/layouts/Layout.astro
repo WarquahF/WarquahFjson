@@ -1,0 +1,143 @@
+---
+import '../styles/global.css';
+import { sections } from '../data/nav';
+import Loader from '../components/svelte/Loader.svelte';
+import CommandPalette from '../components/svelte/CommandPalette.svelte';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'Warquah Faiz — Software Developer',
+  description = 'Warquah Faiz — student developer and AI builder working on desktop applications and developer tools. Performance, privacy and simplicity.',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#0b0b0d" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  </head>
+  <body>
+    <Loader client:load />
+
+    <div class="gutter-shell" id="home">
+      <aside class="gutter" aria-label="Section index">
+        <span class="mono" style="font-size: var(--step--1); color: var(--ink-faint); writing-mode: vertical-rl;">W</span>
+        <div class="gutter-line">
+          <div class="gutter-ticks" id="gutter-ticks">
+            {sections.slice(1).map((s) => (
+              <div class="gutter-tick" data-target={s.href}>
+                <div class="gutter-mark"></div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <span class="mono" style="font-size: var(--step--1); color: var(--ink-faint); writing-mode: vertical-rl;">2026</span>
+      </aside>
+
+      <main>
+        <slot />
+      </main>
+    </div>
+
+    <CommandPalette client:idle />
+
+    <script>
+      // Scroll-spy for the document gutter — brightens the tick nearest
+      // the section currently in view. Pure IntersectionObserver, no
+      // animation library, respects reduced-motion by doing nothing extra.
+      const ticks = Array.from(document.querySelectorAll<HTMLElement>('.gutter-tick'));
+      const targets = ticks
+        .map((tick) => {
+          const id = tick.dataset.target?.replace('#', '');
+          const el = id ? document.getElementById(id) : null;
+          return el ? { tick, el } : null;
+        })
+        .filter((v): v is { tick: HTMLElement; el: HTMLElement } => v !== null);
+
+      if (targets.length) {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              const match = targets.find((t) => t.el === entry.target);
+              if (!match) return;
+              match.tick.dataset.active = entry.isIntersecting ? 'true' : 'false';
+            });
+          },
+          { rootMargin: '-45% 0px -45% 0px', threshold: 0 }
+        );
+        targets.forEach((t) => observer.observe(t.el));
+      }
+
+      // Reveal-on-scroll: adds a class once an element enters the
+      // viewport, then stops observing it. CSS handles the transition.
+      const revealEls = document.querySelectorAll<HTMLElement>('[data-reveal]');
+      const revealObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-revealed');
+              revealObserver.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.12 }
+      );
+      revealEls.forEach((el) => revealObserver.observe(el));
+
+      // Text reveal: splits headline text into per-word spans (once, up
+      // front) so CSS can stagger them in on scroll. Runs before the
+      // observer below so there's something to animate.
+      const textRevealEls = document.querySelectorAll<HTMLElement>('[data-text-reveal]');
+      textRevealEls.forEach((el, elIndex) => {
+        const words = el.textContent?.split(/\s+/).filter(Boolean) ?? [];
+        el.innerHTML = words
+          .map((w, i) => `<span class="word" style="transition-delay:${i * 28}ms">${w}</span>`)
+          .join(' ');
+        el.setAttribute('aria-label', words.join(' '));
+        if (elIndex === 0) el.setAttribute('role', 'text');
+      });
+
+      const textRevealObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-revealed');
+              textRevealObserver.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.4 }
+      );
+      textRevealEls.forEach((el) => textRevealObserver.observe(el));
+    </script>
+
+    <style is:global>
+      [data-reveal] {
+        opacity: 0;
+        transform: translateY(14px);
+        transition: opacity 0.6s var(--ease, ease), transform 0.6s var(--ease, ease);
+      }
+      [data-reveal].is-revealed {
+        opacity: 1;
+        transform: none;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        [data-reveal] {
+          opacity: 1;
+          transform: none;
+          transition: none;
+        }
+      }
+    </style>
+  </body>
+</html>

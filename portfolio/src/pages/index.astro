@@ -1,0 +1,22 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Hero from '../components/Hero.astro';
+import About from '../components/About.astro';
+import Projects from '../components/Projects.astro';
+import Status from '../components/Status.astro';
+import Contact from '../components/Contact.astro';
+import Footer from '../components/Footer.astro';
+import ProjectPanel from '../components/svelte/ProjectPanel.svelte';
+---
+
+<Layout>
+  <Nav />
+  <Hero />
+  <About />
+  <Projects />
+  <Status />
+  <Contact />
+  <Footer />
+  <ProjectPanel client:idle />
+</Layout>

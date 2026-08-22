@@ -1,0 +1,173 @@
+---
+const focus = [
+  'AI Development',
+  'Desktop Applications',
+  'Frontend Engineering',
+  'Backend Development',
+  'Rust',
+  'TypeScript',
+  'Cybersecurity',
+  'Open Source',
+];
+---
+
+<section class="section" id="about" data-reveal>
+  <div class="section-inner">
+    <p class="eyebrow"><span class="path">/about</span></p>
+    <h2 data-text-reveal>Fast, private, simple.</h2>
+
+    <div class="about-grid">
+      <div class="about-files mono" role="tablist" aria-label="About files">
+        <button class="file-tab" role="tab" aria-selected="true" data-tab="profile">profile</button>
+        <button class="file-tab" role="tab" aria-selected="false" data-tab="notes">notes.txt</button>
+        <button class="file-tab" role="tab" aria-selected="false" data-tab="stack">stack.config</button>
+      </div>
+
+      <div class="about-panels">
+        <div class="about-panel" data-panel="profile" data-active="true">
+          <p class="text-ink" style="font-size: var(--step-1); max-width: 42ch;">
+            I build software that respects your machine and your data.
+          </p>
+          <p>
+            I'm a student developer working on desktop applications and
+            developer tools. My work is local-first by default — software
+            that runs on your machine, keeps your data yours, and stays out
+            of your way.
+          </p>
+        </div>
+
+        <div class="about-panel" data-panel="notes">
+          <ul class="notes-list">
+            <li><strong class="text-ink">Performance.</strong> Every millisecond matters. I profile, measure and cut what isn't needed.</li>
+            <li><strong class="text-ink">Privacy.</strong> Local-first by default. Your data stays on your device, not in a cloud dashboard.</li>
+            <li><strong class="text-ink">Simplicity.</strong> Fewer moving parts. Interfaces that don't need a manual to understand.</li>
+          </ul>
+        </div>
+
+        <div class="about-panel" data-panel="stack">
+          <ul class="focus-list mono">
+            {focus.map((f) => <li>{f}</li>)}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const tabs = document.querySelectorAll<HTMLButtonElement>('.file-tab');
+  const panels = document.querySelectorAll<HTMLElement>('.about-panel');
+
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      tabs.forEach((t) => t.setAttribute('aria-selected', 'false'));
+      panels.forEach((p) => p.removeAttribute('data-active'));
+      tab.setAttribute('aria-selected', 'true');
+      const target = document.querySelector(`[data-panel="${tab.dataset.tab}"]`);
+      target?.setAttribute('data-active', 'true');
+    });
+  });
+</script>
+
+<style>
+  .about-grid {
+    display: grid;
+    grid-template-columns: 10rem 1fr;
+    gap: clamp(1.5rem, 4vw, 3rem);
+    margin-top: 2.5rem;
+  }
+
+  @media (max-width: 640px) {
+    .about-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .about-files {
+    display: flex;
+    flex-direction: row;
+    gap: 0.25rem;
+    height: fit-content;
+  }
+
+  @media (min-width: 641px) {
+    .about-files {
+      flex-direction: column;
+      border-right: 1px solid var(--line);
+      padding-right: 1rem;
+    }
+  }
+
+  .file-tab {
+    text-align: left;
+    font-size: var(--step--1);
+    color: var(--ink-faint);
+    padding: 0.5rem 0.65rem;
+    border-radius: var(--radius);
+    transition: color 0.2s ease, background 0.2s ease;
+  }
+
+  .file-tab[aria-selected='true'] {
+    color: var(--signal);
+    background: var(--bg-raised);
+  }
+
+  .file-tab:hover {
+    color: var(--ink);
+  }
+
+  .about-panels {
+    min-width: 0;
+  }
+
+  .about-panel {
+    display: none;
+  }
+
+  .about-panel[data-active='true'] {
+    display: block;
+    animation: fade-in 0.3s var(--ease, ease);
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .notes-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .notes-list li {
+    color: var(--ink-dim);
+    max-width: 52ch;
+  }
+
+  .focus-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  .focus-list li {
+    font-size: var(--step--1);
+    color: var(--ink-dim);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    padding: 0.4rem 0.7rem;
+  }
+</style>

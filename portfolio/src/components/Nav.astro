@@ -1,0 +1,135 @@
+---
+import { sections, social } from '../data/nav';
+---
+
+<header class="nav glass">
+  <a class="nav-mark mono" href="#home" aria-label="Home">
+    <span class="nav-mark-box">W</span>
+    <span class="nav-mark-name">WARQUAH FAIZ</span>
+  </a>
+
+  <nav class="nav-links mono" aria-label="Primary">
+    {sections.slice(1).map((s) => (
+      <a href={s.href}>{s.label}</a>
+    ))}
+  </nav>
+
+  <div class="nav-right">
+    <a class="nav-github mono" href={social.github} target="_blank" rel="noreferrer">
+      github.com/WarquahF
+    </a>
+    <button class="nav-kbd mono" type="button" data-command-trigger aria-label="Open command palette">
+      <span>⌘</span>K
+    </button>
+  </div>
+</header>
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.9rem clamp(1.25rem, 5vw, 3.5rem);
+    border: none;
+    border-bottom: 1px solid var(--line);
+    border-radius: 0;
+    box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.04);
+  }
+
+  .nav-mark {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    text-decoration: none;
+    color: var(--ink);
+    font-size: var(--step--1);
+    letter-spacing: 0.04em;
+  }
+
+  .nav-mark-box {
+    width: 1.5rem;
+    height: 1.5rem;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    color: var(--signal);
+  }
+
+  .nav-mark-name {
+    display: none;
+  }
+
+  @media (min-width: 560px) {
+    .nav-mark-name {
+      display: inline;
+    }
+  }
+
+  .nav-links {
+    display: none;
+    gap: 1.5rem;
+    font-size: var(--step--1);
+    letter-spacing: 0.03em;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    color: var(--ink-dim);
+    transition: color 0.2s ease;
+  }
+
+  .nav-links a:hover {
+    color: var(--ink);
+  }
+
+  @media (min-width: 780px) {
+    .nav-links {
+      display: flex;
+    }
+  }
+
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .nav-github {
+    display: none;
+    font-size: var(--step--1);
+    color: var(--ink-dim);
+    text-decoration: none;
+  }
+
+  .nav-github:hover {
+    color: var(--ink);
+  }
+
+  @media (min-width: 960px) {
+    .nav-github {
+      display: inline;
+    }
+  }
+
+  .nav-kbd {
+    display: flex;
+    align-items: center;
+    gap: 0.2rem;
+    font-size: var(--step--1);
+    color: var(--ink-dim);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    padding: 0.3rem 0.55rem;
+    transition: border-color 0.2s ease, color 0.2s ease;
+  }
+
+  .nav-kbd:hover {
+    color: var(--ink);
+    border-color: var(--ink-faint);
+  }
+</style>

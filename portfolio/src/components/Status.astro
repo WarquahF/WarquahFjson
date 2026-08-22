@@ -1,0 +1,97 @@
+---
+const focus = ['AI Systems', 'Rust', 'Desktop Applications', 'Frontend Engineering'];
+---
+
+<section class="section" id="status" data-reveal>
+  <div class="section-inner">
+    <p class="eyebrow"><span class="path">/status</span></p>
+    <h2 data-text-reveal>Currently building</h2>
+
+    <div class="status-grid">
+      <div class="status-block">
+        <p class="mono status-label">Building</p>
+        <p class="text-ink status-value">Blink</p>
+        <p class="status-sub">Local-first AI assistant · Tauri migration</p>
+      </div>
+
+      <div class="status-block">
+        <p class="mono status-label">Stack</p>
+        <p class="mono status-stack">Tauri · Rust · TypeScript · SQLite</p>
+      </div>
+
+      <div class="status-block">
+        <p class="mono status-label">Focus</p>
+        <ul class="status-focus mono">
+          {focus.map((f, i) => <li><span>{String(i + 1).padStart(2, '0')}</span>{f}</li>)}
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .status-grid {
+    margin-top: 2.5rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+  }
+
+  @media (max-width: 780px) {
+    .status-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .status-block {
+    background: color-mix(in srgb, var(--bg-raised) 55%, transparent);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    padding: 1.5rem;
+  }
+
+  .status-label {
+    font-size: var(--step--1);
+    color: var(--signal);
+    letter-spacing: 0.05em;
+    margin: 0 0 0.75rem;
+  }
+
+  .status-value {
+    font-family: var(--font-display);
+    font-size: var(--step-2);
+    margin: 0;
+  }
+
+  .status-sub {
+    margin-top: 0.4rem;
+    font-size: var(--step--1);
+  }
+
+  .status-stack {
+    color: var(--ink-dim);
+    font-size: var(--step-0);
+  }
+
+  .status-focus {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .status-focus li {
+    display: flex;
+    gap: 0.6rem;
+    font-size: var(--step--1);
+    color: var(--ink-dim);
+  }
+
+  .status-focus li span {
+    color: var(--ink-faint);
+  }
+</style>

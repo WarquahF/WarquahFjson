@@ -1,0 +1,94 @@
+---
+import { social } from '../data/nav';
+---
+
+<section class="hero" data-reveal>
+  <p class="hero-kicker mono">Warquah Faiz — Student Developer · AI Builder</p>
+
+  <h1 class="hero-title" data-text-reveal>
+    I build AI-powered software, desktop applications and developer tools.
+  </h1>
+
+  <p class="hero-sub">
+    I'm a student developer focused on building software that's fast, private
+    and simple. My current flagship project is Blink, a local-first AI
+    assistant.
+  </p>
+
+  <div class="hero-actions">
+    <a class="btn btn-primary mono" href="#projects">View projects</a>
+    <a class="btn mono" href={social.github} target="_blank" rel="noreferrer">GitHub</a>
+    <a class="btn mono" href="#contact">Contact</a>
+  </div>
+
+  <p class="hero-meta mono">Based in Odisha, India · Open to projects</p>
+</section>
+
+<style>
+  .hero {
+    padding: clamp(3rem, 9vw, 6rem) clamp(1.25rem, 5vw, 3.5rem) clamp(2.5rem, 6vw, 4rem);
+    border-bottom: 1px solid var(--line);
+    max-width: var(--wide-w);
+  }
+
+  .hero-kicker {
+    font-size: var(--step--1);
+    color: var(--ink-dim);
+    letter-spacing: 0.03em;
+    margin: 0 0 1rem;
+  }
+
+  .hero-title {
+    font-size: var(--step-4);
+    max-width: 16ch;
+    color: var(--ink);
+  }
+
+  .hero-sub {
+    max-width: 46ch;
+    font-size: var(--step-0);
+    margin-top: 1.1rem;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.75rem;
+  }
+
+  .btn {
+    font-size: var(--step--1);
+    letter-spacing: 0.02em;
+    text-decoration: none;
+    color: var(--ink-dim);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    padding: 0.55rem 1rem;
+    transition: color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .btn:hover {
+    color: var(--ink);
+    border-color: var(--ink-faint);
+    transform: translateY(-1px);
+  }
+
+  .btn-primary {
+    color: var(--bg);
+    background: var(--signal);
+    border-color: var(--signal);
+  }
+
+  .btn-primary:hover {
+    color: var(--bg);
+    border-color: var(--signal);
+    filter: brightness(1.08);
+  }
+
+  .hero-meta {
+    margin-top: 2rem;
+    font-size: var(--step--1);
+    color: var(--ink-faint);
+  }
+</style>

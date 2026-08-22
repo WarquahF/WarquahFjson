@@ -1,0 +1,157 @@
+---
+import { projects, archive } from '../data/projects';
+---
+
+<section class="section" id="projects" data-reveal>
+  <div class="section-inner">
+    <p class="eyebrow"><span class="path">/projects</span></p>
+    <h2 data-text-reveal>Selected work</h2>
+    <p style="margin-top: 0.75rem;">Featured work and everything in between. Open a record for detail.</p>
+
+    <div class="records">
+      {projects.map((p) => (
+        <article class="record" data-project={p.slug} tabindex="0" role="button" aria-haspopup="dialog">
+          {p.featured && <span class="record-flag mono">Featured</span>}
+          <div class="record-head">
+            <h3>{p.name}</h3>
+            <span class="mono record-kind">{p.kind}</span>
+          </div>
+          <p class="record-summary">{p.summary}</p>
+          <div class="record-stack mono">
+            {p.stack.map((s) => <span>{s}</span>)}
+          </div>
+          <span class="record-open mono">Open record →</span>
+        </article>
+      ))}
+    </div>
+
+    <div class="archive">
+      <p class="eyebrow" style="margin-bottom: 0.75rem;"><span class="path">/archive</span></p>
+      <ul class="archive-list mono">
+        {archive.map((a, i) => (
+          <li><span class="archive-index">{String(i + 1).padStart(2, '0')}</span>{a.name}<span class="archive-note">{a.note}</span></li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<script>
+  const cards = document.querySelectorAll<HTMLElement>('[data-project]');
+  cards.forEach((card) => {
+    const open = () => {
+      window.dispatchEvent(new CustomEvent('open-project', { detail: card.dataset.project }));
+    };
+    card.addEventListener('click', open);
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        open();
+      }
+    });
+  });
+</script>
+
+<style>
+  .records {
+    margin-top: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--line);
+  }
+
+  .record {
+    position: relative;
+    padding: 1.75rem 0;
+    border-bottom: 1px solid var(--line);
+    cursor: pointer;
+    transition: padding-left 0.25s var(--ease, ease);
+  }
+
+  .record:hover,
+  .record:focus-visible {
+    padding-left: 0.75rem;
+  }
+
+  .record-flag {
+    display: inline-block;
+    font-size: var(--step--1);
+    color: var(--signal);
+    letter-spacing: 0.05em;
+    margin-bottom: 0.6rem;
+  }
+
+  .record-head {
+    display: flex;
+    align-items: baseline;
+    gap: 0.9rem;
+    flex-wrap: wrap;
+  }
+
+  .record-kind {
+    font-size: var(--step--1);
+    color: var(--ink-faint);
+  }
+
+  .record-summary {
+    margin-top: 0.5rem;
+    max-width: 56ch;
+  }
+
+  .record-stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.9rem;
+  }
+
+  .record-stack span {
+    font-size: var(--step--1);
+    color: var(--ink-dim);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    padding: 0.25rem 0.55rem;
+  }
+
+  .record-open {
+    display: inline-block;
+    margin-top: 0.9rem;
+    font-size: var(--step--1);
+    color: var(--ink-faint);
+  }
+
+  .record:hover .record-open,
+  .record:focus-visible .record-open {
+    color: var(--signal);
+  }
+
+  .archive {
+    margin-top: 3rem;
+  }
+
+  .archive-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .archive-list li {
+    display: flex;
+    gap: 1rem;
+    align-items: baseline;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--line);
+    font-size: var(--step--1);
+    color: var(--ink-dim);
+  }
+
+  .archive-index {
+    color: var(--ink-faint);
+  }
+
+  .archive-note {
+    margin-left: auto;
+    color: var(--ink-faint);
+  }
+</style>
