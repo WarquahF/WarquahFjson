@@ -40,9 +40,6 @@
 
   $: if (activeIndex >= filtered.length) activeIndex = Math.max(0, filtered.length - 1);
 
-  // Sections mix same-page anchors (#about) and routes (/notes). Anchors
-  // only exist on the home page — from any other route, jump to the
-  // rooted URL instead of scrolling. Routes navigate directly.
   function goTo(href: string) {
     if (href.startsWith('#')) {
       const target = document.querySelector(href);
@@ -150,10 +147,10 @@
   .scrim {
     position: fixed;
     inset: 0;
-    background: rgba(11, 11, 13, 0.7);
-    backdrop-filter: blur(3px);
+    background: rgba(11, 11, 13, 0.6);
+    backdrop-filter: blur(2px);
     z-index: 95;
-    animation: fade-in 0.15s ease;
+    animation: fade-in 0.12s ease;
   }
 
   .palette {
@@ -161,10 +158,10 @@
     top: 14vh;
     left: 50%;
     transform: translateX(-50%);
-    width: min(32rem, 92vw);
-    border-radius: 10px;
+    width: min(30rem, 92vw);
+    border-radius: 8px;
     z-index: 96;
-    animation: drop-in 0.2s var(--ease, ease);
+    animation: drop-in 0.18s var(--ease, ease);
   }
 
   @media (prefers-reduced-motion: reduce) {
@@ -177,7 +174,7 @@
   @keyframes drop-in {
     from {
       opacity: 0;
-      transform: translate(-50%, -6px);
+      transform: translate(-50%, -4px);
     }
     to {
       opacity: 1;
@@ -197,13 +194,13 @@
   .palette-input-row {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    padding: 0.9rem 1.1rem;
+    gap: 0.6rem;
+    padding: 0.75rem 1rem;
     border-bottom: 1px solid var(--line);
   }
 
   .palette-prompt {
-    font-size: var(--step--1);
+    font-size: var(--step--2);
     color: var(--signal);
   }
 
@@ -221,15 +218,13 @@
   }
 
   .palette-esc {
-    font-size: var(--step--1);
+    font-size: var(--step--2);
     color: var(--ink-faint);
   }
 
   .palette-list {
-    list-style: none;
-    margin: 0;
-    padding: 0.4rem;
-    max-height: 18rem;
+    padding: 0.3rem;
+    max-height: 16rem;
     overflow-y: auto;
   }
 
@@ -238,14 +233,15 @@
     display: flex;
     justify-content: space-between;
     text-align: left;
-    padding: 0.6rem 0.7rem;
+    padding: 0.5rem 0.6rem;
     border-radius: 4px;
     font-size: var(--step--1);
     color: var(--ink-dim);
+    transition: background 0.1s var(--ease-out), color 0.1s var(--ease-out);
   }
 
   .palette-list button.active {
-    background: var(--bg);
+    background: var(--signal-ghost);
     color: var(--ink);
   }
 
@@ -254,17 +250,17 @@
   }
 
   .palette-empty {
-    padding: 1rem;
+    padding: 0.75rem;
     font-size: var(--step--1);
     color: var(--ink-faint);
   }
 
   .palette-footer {
     display: flex;
-    gap: 1.25rem;
-    padding: 0.7rem 1.1rem;
+    gap: 1rem;
+    padding: 0.55rem 1rem;
     border-top: 1px solid var(--line);
-    font-size: var(--step--1);
+    font-size: var(--step--2);
     color: var(--ink-faint);
   }
 </style>

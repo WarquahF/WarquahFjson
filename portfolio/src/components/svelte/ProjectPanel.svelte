@@ -37,7 +37,7 @@
 {#if open && project}
   <div class="scrim" on:click={close} aria-hidden="true"></div>
   <div
-    class="panel glass"
+    class="panel"
     role="dialog"
     aria-modal="true"
     aria-labelledby="panel-title"
@@ -46,7 +46,7 @@
   >
     <div class="panel-head">
       <span class="mono panel-kind">{project.kind}</span>
-      <button class="mono panel-close" type="button" on:click={close} aria-label="Close">Esc ✕</button>
+      <button class="mono panel-close" type="button" on:click={close} aria-label="Close">Esc <span class="close-x">✕</span></button>
     </div>
 
     <h3 id="panel-title" class="panel-title">{project.name}</h3>
@@ -96,10 +96,10 @@
   .scrim {
     position: fixed;
     inset: 0;
-    background: rgba(11, 11, 13, 0.7);
-    backdrop-filter: blur(3px);
+    background: rgba(11, 11, 13, 0.65);
+    backdrop-filter: blur(2px);
     z-index: 90;
-    animation: fade-in 0.2s ease;
+    animation: fade-in 0.15s ease;
   }
 
   .panel {
@@ -108,21 +108,17 @@
     right: 0;
     height: 100dvh;
     width: min(28rem, 100vw);
-    border-left: 1px solid rgba(255, 255, 255, 0.07);
-    border-top: none;
-    border-right: none;
-    border-bottom: none;
+    background: var(--bg);
+    border-left: 1px solid var(--line);
     border-radius: 0;
     z-index: 91;
-    padding: clamp(1.5rem, 4vw, 2.5rem);
+    padding: clamp(1.25rem, 3vw, 2rem);
     overflow-y: auto;
-    animation: slide-in 0.35s var(--ease, ease);
+    animation: slide-in 0.3s var(--ease, ease);
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .panel {
-      animation: none;
-    }
+    .panel,
     .scrim {
       animation: none;
     }
@@ -153,47 +149,58 @@
   }
 
   .panel-kind {
-    font-size: var(--step--1);
+    font-size: var(--step--2);
     color: var(--signal);
+    letter-spacing: 0.04em;
   }
 
   .panel-close {
-    font-size: var(--step--1);
+    font-size: var(--step--2);
     color: var(--ink-faint);
     border: 1px solid var(--line-strong);
     border-radius: var(--radius);
-    padding: 0.3rem 0.55rem;
+    padding: 0.2rem 0.45rem;
+    transition: color 0.2s var(--ease-out), border-color 0.2s var(--ease-out);
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
   }
 
   .panel-close:hover {
     color: var(--ink);
+    border-color: var(--ink-faint);
+  }
+
+  .close-x {
+    font-size: 0.7em;
   }
 
   .panel-title {
     font-size: var(--step-3);
-    margin-top: 1.25rem;
+    margin-top: var(--space-lg);
+    line-height: 1.1;
   }
 
   .panel-detail {
-    margin-top: 0.9rem;
+    margin-top: var(--space-md);
+    line-height: 1.55;
   }
 
   .panel-points {
-    list-style: none;
-    padding: 0;
-    margin: 1.5rem 0 0;
+    margin: var(--space-lg) 0 0;
     display: flex;
     flex-direction: column;
-    gap: 0.6rem;
+    gap: 0.5rem;
     border-top: 1px solid var(--line);
-    padding-top: 1.25rem;
+    padding-top: var(--space-lg);
   }
 
   .panel-points li {
     font-size: var(--step--1);
     color: var(--ink-dim);
-    padding-left: 1rem;
+    padding-left: 0.9rem;
     position: relative;
+    line-height: 1.5;
   }
 
   .panel-points li::before {
@@ -204,31 +211,36 @@
   }
 
   .panel :global(.flow) {
-    margin-top: 1.5rem;
-    padding-top: 1.25rem;
+    margin-top: var(--space-lg);
+    padding-top: var(--space-lg);
     border-top: 1px solid var(--line);
   }
 
   .panel-stack {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-top: 1.5rem;
+    gap: 0.4rem;
+    margin-top: var(--space-lg);
   }
 
   .panel-stack span {
-    font-size: var(--step--1);
-    color: var(--ink-dim);
-    border: 1px solid var(--line-strong);
+    font-size: var(--step--2);
+    color: var(--ink-faint);
+    border: 1px solid var(--line);
     border-radius: var(--radius);
-    padding: 0.25rem 0.55rem;
+    padding: 0.2rem 0.5rem;
   }
 
   .panel-link {
     display: inline-block;
-    margin-top: 2rem;
+    margin-top: var(--space-xl);
     font-size: var(--step--1);
     color: var(--signal);
     text-decoration: none;
+    transition: opacity 0.2s var(--ease-out);
+  }
+
+  .panel-link:hover {
+    opacity: 0.8;
   }
 </style>

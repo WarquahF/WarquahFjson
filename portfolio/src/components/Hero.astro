@@ -3,56 +3,65 @@ import { social } from '../data/nav';
 ---
 
 <section class="hero" data-reveal>
-  <p class="hero-kicker mono">Warquah Faiz — Student Developer</p>
+  <div class="hero-inner">
+    <p class="hero-kicker mono">Warquah Faiz — Student Developer</p>
 
-  <h1 class="hero-title" data-text-reveal>
-    Student developer exploring how software works.
-  </h1>
+    <h1 class="hero-title" data-text-reveal>
+      Student developer exploring how software works.
+    </h1>
 
-  <p class="hero-sub">
-    Building software. Studying systems. Documenting what I learn.
-  </p>
+    <p class="hero-sub">
+      Building software. Studying systems. Documenting what I learn.
+    </p>
 
-  <div class="hero-actions">
-    <a class="btn btn-primary mono" href="#projects">View projects</a>
-    <a class="btn mono" href={social.github} target="_blank" rel="noreferrer">GitHub</a>
-    <a class="btn mono" href="#contact">Contact</a>
+    <div class="hero-actions">
+      <a class="btn btn-primary mono" href="#projects">View projects</a>
+      <a class="btn mono" href={social.github} target="_blank" rel="noreferrer">GitHub</a>
+      <a class="btn mono" href="#contact">Contact</a>
+    </div>
+
+    <p class="hero-meta mono">Based in Odisha, India · Open to projects</p>
   </div>
-
-  <p class="hero-meta mono">Based in Odisha, India · Open to projects</p>
 </section>
 
 <style>
   .hero {
-    padding: clamp(3rem, 9vw, 6rem) clamp(1.25rem, 5vw, 3.5rem) clamp(2.5rem, 6vw, 4rem);
+    padding: clamp(3rem, 8vw, 5.5rem) clamp(1.25rem, 5vw, 3.5rem) clamp(2.5rem, 5vw, 3.5rem);
     border-bottom: 1px solid var(--line);
     max-width: var(--wide-w);
   }
 
+  .hero-inner {
+    max-width: 52rem;
+  }
+
   .hero-kicker {
     font-size: var(--step--1);
-    color: var(--ink-dim);
-    letter-spacing: 0.03em;
-    margin: 0 0 1rem;
+    color: var(--ink-faint);
+    letter-spacing: 0.04em;
+    margin: 0 0 var(--space-lg);
   }
 
   .hero-title {
     font-size: var(--step-4);
-    max-width: 16ch;
+    max-width: 14ch;
     color: var(--ink);
+    line-height: 1.08;
   }
 
   .hero-sub {
-    max-width: 46ch;
+    max-width: 42ch;
     font-size: var(--step-0);
-    margin-top: 1.1rem;
+    color: var(--ink-dim);
+    margin-top: var(--space-md);
+    line-height: 1.65;
   }
 
   .hero-actions {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.75rem;
-    margin-top: 1.75rem;
+    gap: 0.6rem;
+    margin-top: var(--space-xl);
   }
 
   .btn {
@@ -62,8 +71,8 @@ import { social } from '../data/nav';
     color: var(--ink-dim);
     border: 1px solid var(--line-strong);
     border-radius: var(--radius);
-    padding: 0.55rem 1rem;
-    transition: color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+    padding: 0.5rem 0.9rem;
+    transition: color 0.2s var(--ease-out), border-color 0.2s var(--ease-out), transform 0.2s var(--ease-out);
   }
 
   .btn:hover {
@@ -81,12 +90,11 @@ import { social } from '../data/nav';
   .btn-primary:hover {
     color: var(--bg);
     border-color: var(--signal);
-    filter: brightness(1.08);
+    filter: brightness(1.1);
   }
 
   .hero-meta {
-    margin-top: 2rem;
+    margin-top: var(--space-2xl);
     font-size: var(--step--1);
     color: var(--ink-faint);
   }
-</style>

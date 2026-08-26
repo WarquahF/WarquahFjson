@@ -43,11 +43,9 @@ const {
 
     <div class="gutter-shell" id="home">
       <aside class="gutter" aria-label="Section index">
-        <span class="mono" style="font-size: var(--step--1); color: var(--ink-faint); writing-mode: vertical-rl;">W</span>
+        <span class="mono gutter-side-label">W</span>
         <div class="gutter-line">
           <div class="gutter-ticks" id="gutter-ticks">
-            {/* Scroll-spy ticks only apply to same-page anchors — routes
-                like /notes have no in-page target to observe. */}
             {sections.slice(1).filter((s) => s.href.startsWith('#')).map((s) => (
               <div class="gutter-tick" data-target={s.href}>
                 <div class="gutter-mark"></div>
@@ -55,7 +53,7 @@ const {
             ))}
           </div>
         </div>
-        <span class="mono" style="font-size: var(--step--1); color: var(--ink-faint); writing-mode: vertical-rl;">2026</span>
+        <span class="mono gutter-side-label">2026</span>
       </aside>
 
       <main>
@@ -66,9 +64,6 @@ const {
     <CommandPalette client:idle />
 
     <script>
-      // Scroll-spy for the document gutter — brightens the tick nearest
-      // the section currently in view. Pure IntersectionObserver, no
-      // animation library, respects reduced-motion by doing nothing extra.
       const ticks = Array.from(document.querySelectorAll<HTMLElement>('.gutter-tick'));
       const targets = ticks
         .map((tick) => {
@@ -92,8 +87,6 @@ const {
         targets.forEach((t) => observer.observe(t.el));
       }
 
-      // Reveal-on-scroll: adds a class once an element enters the
-      // viewport, then stops observing it. CSS handles the transition.
       const revealEls = document.querySelectorAll<HTMLElement>('[data-reveal]');
       const revealObserver = new IntersectionObserver(
         (entries) => {
@@ -104,18 +97,15 @@ const {
             }
           });
         },
-        { threshold: 0.12 }
+        { threshold: 0.08 }
       );
       revealEls.forEach((el) => revealObserver.observe(el));
 
-      // Text reveal: splits headline text into per-word spans (once, up
-      // front) so CSS can stagger them in on scroll. Runs before the
-      // observer below so there's something to animate.
       const textRevealEls = document.querySelectorAll<HTMLElement>('[data-text-reveal]');
       textRevealEls.forEach((el, elIndex) => {
         const words = el.textContent?.split(/\s+/).filter(Boolean) ?? [];
         el.innerHTML = words
-          .map((w, i) => `<span class="word" style="transition-delay:${i * 28}ms">${w}</span>`)
+          .map((w, i) => `<span class="word" style="transition-delay:${i * 25}ms">${w}</span>`)
           .join(' ');
         el.setAttribute('aria-label', words.join(' '));
         if (elIndex === 0) el.setAttribute('role', 'text');
@@ -130,7 +120,7 @@ const {
             }
           });
         },
-        { threshold: 0.4 }
+        { threshold: 0.35 }
       );
       textRevealEls.forEach((el) => textRevealObserver.observe(el));
     </script>
@@ -138,8 +128,8 @@ const {
     <style is:global>
       [data-reveal] {
         opacity: 0;
-        transform: translateY(14px);
-        transition: opacity 0.6s var(--ease, ease), transform 0.6s var(--ease, ease);
+        transform: translateY(10px);
+        transition: opacity 0.5s var(--ease, ease), transform 0.5s var(--ease, ease);
       }
       [data-reveal].is-revealed {
         opacity: 1;

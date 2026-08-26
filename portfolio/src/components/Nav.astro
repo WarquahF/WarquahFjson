@@ -1,9 +1,6 @@
 ---
 import { sections, social } from '../data/nav';
 
-// Sections mix same-page anchors (#about) and routes (/notes). Anchors
-// only resolve on the home page — from any other route they must be
-// rooted (/#about) to land in the right place.
 const isHome = Astro.url.pathname === '/';
 const linkFor = (href: string) =>
   !isHome && href.startsWith('#') ? `/${href}` : href;
@@ -40,31 +37,37 @@ const linkFor = (href: string) =>
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    padding: 0.9rem clamp(1.25rem, 5vw, 3.5rem);
+    padding: 0.75rem clamp(1.25rem, 5vw, 3.5rem);
     border: none;
     border-bottom: 1px solid var(--line);
     border-radius: 0;
-    box-shadow: inset 0 -1px 0 rgba(255, 255, 255, 0.04);
+    box-shadow: none;
   }
 
   .nav-mark {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
+    gap: 0.5rem;
     text-decoration: none;
     color: var(--ink);
     font-size: var(--step--1);
     letter-spacing: 0.04em;
+    transition: opacity 0.2s var(--ease-out);
+  }
+
+  .nav-mark:hover {
+    opacity: 0.8;
   }
 
   .nav-mark-box {
-    width: 1.5rem;
-    height: 1.5rem;
+    width: 1.4rem;
+    height: 1.4rem;
     display: grid;
     place-items: center;
     border: 1px solid var(--line-strong);
     border-radius: var(--radius);
     color: var(--signal);
+    font-size: 0.7rem;
   }
 
   .nav-mark-name {
@@ -79,19 +82,35 @@ const linkFor = (href: string) =>
 
   .nav-links {
     display: none;
-    gap: 1.5rem;
+    gap: 1.25rem;
     font-size: var(--step--1);
-    letter-spacing: 0.03em;
+    letter-spacing: 0.02em;
   }
 
   .nav-links a {
     text-decoration: none;
-    color: var(--ink-dim);
-    transition: color 0.2s ease;
+    color: var(--ink-faint);
+    transition: color 0.2s var(--ease-out);
+    position: relative;
+  }
+
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--signal);
+    transition: width 0.25s var(--ease-out);
   }
 
   .nav-links a:hover {
     color: var(--ink);
+  }
+
+  .nav-links a:hover::after {
+    width: 100%;
   }
 
   @media (min-width: 780px) {
@@ -103,14 +122,15 @@ const linkFor = (href: string) =>
   .nav-right {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.6rem;
   }
 
   .nav-github {
     display: none;
     font-size: var(--step--1);
-    color: var(--ink-dim);
+    color: var(--ink-faint);
     text-decoration: none;
+    transition: color 0.2s var(--ease-out);
   }
 
   .nav-github:hover {
@@ -126,13 +146,13 @@ const linkFor = (href: string) =>
   .nav-kbd {
     display: flex;
     align-items: center;
-    gap: 0.2rem;
-    font-size: var(--step--1);
-    color: var(--ink-dim);
+    gap: 0.15rem;
+    font-size: var(--step--2);
+    color: var(--ink-faint);
     border: 1px solid var(--line-strong);
     border-radius: var(--radius);
-    padding: 0.3rem 0.55rem;
-    transition: border-color 0.2s ease, color 0.2s ease;
+    padding: 0.25rem 0.5rem;
+    transition: border-color 0.2s var(--ease-out), color 0.2s var(--ease-out);
   }
 
   .nav-kbd:hover {
