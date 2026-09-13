@@ -227,6 +227,43 @@ const {
       );
       paintDrift();
 
+      // Viewport-triggered phrase highlighting: author phrases with
+      // `|` separators; each phrase lights fully when it crosses the
+      // trigger band (~middle viewport) and stays lit. Discrete events.
+      document.querySelectorAll<HTMLElement>('[data-trigger-highlight]').forEach((el) => {
+        const full = el.textContent ?? '';
+        el.setAttribute('aria-label', full.split('|').join(' ').replace(/\s+/g, ' ').trim());
+        el.innerHTML = full
+          .split('|')
+          .map((part) => part.trim())
+          .filter(Boolean)
+          .map(
+            (phrase) =>
+              `<span class="tph">${phrase
+                .split(/\s+/)
+                .map((w) => `<span class="tw">${w}</span>`)
+                .join(' ')}</span>`
+          )
+          .join(' ');
+        if (reduceMotion) {
+          el.querySelectorAll('.tph').forEach((p) => p.classList.add('lit'));
+          return;
+        }
+        const triggerObserver = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('lit');
+                triggerObserver.unobserve(entry.target);
+              }
+            });
+          },
+          // Trigger band centered ~50% viewport height.
+          { rootMargin: '-42% 0px -42% 0px', threshold: 0 }
+        );
+        el.querySelectorAll('.tph').forEach((p) => triggerObserver.observe(p));
+      });
+
       // Nav: transparent at top, solid once scrolling.
       const nav = document.querySelector('.nav');
       const paintNav = () => nav?.classList.toggle('is-solid', window.scrollY > 24);

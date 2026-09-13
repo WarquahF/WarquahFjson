@@ -35,11 +35,11 @@
   /* color — warm paper light system */
   --bg: #f5f5f2;
   --bg-raised: #ffffff;
-  --line: #e4e3dc;
-  --line-strong: #d2d1c8;
-  --ink: #1a1a18;
-  --ink-dim: #5c5c56;
-  --ink-faint: #9b9a90;
+  --line: #e2e2de;
+  --line-strong: #cfcfc9;
+  --ink: #111111;
+  --ink-dim: #666666;
+  --ink-faint: #999999;
   --signal: #96690f;
   --signal-dim: #c9a86a;
   --signal-ghost: rgba(150, 105, 15, 0.08);
@@ -293,9 +293,9 @@ h1,
 h2,
 h3 {
   font-family: var(--font-display);
-  font-weight: 480;
-  line-height: 1.1;
-  letter-spacing: -0.015em;
+  font-weight: 650;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
   margin: 0;
 }
 
@@ -306,7 +306,7 @@ h2 {
 
 h3 {
   font-size: var(--step-1);
-  font-weight: 550;
+  font-weight: 600;
 }
 
 p {
@@ -556,11 +556,13 @@ ul {
 .stage-statement {
   font-family: var(--font-display);
   font-size: clamp(2rem, 5.2vw, 3.75rem);
-  line-height: 1.08;
-  letter-spacing: -0.02em;
+  font-weight: 700;
+  line-height: 1.06;
+  letter-spacing: -0.025em;
   max-width: 22ch;
   color: var(--ink);
   margin: 0;
+  text-wrap: balance;
 }
 .stage-sub {
   margin-top: var(--space-lg);
@@ -614,11 +616,27 @@ a:hover .link-arrow {
   background: #fafaf7;
 }
 
+/* Viewport-triggered phrase highlighting: phrases sit muted until
+   they cross the trigger band (~middle viewport), then snap to full
+   emphasis and stay there. Discrete events, not scroll scrubbing. */
+[data-trigger-highlight] .tph {
+  display: inline;
+}
+[data-trigger-highlight] .tw {
+  color: var(--ink-faint);
+  transition: color 0.4s ease;
+}
+[data-trigger-highlight] .tph.lit .tw {
+  color: var(--ink);
+  font-weight: 600;
+}
+
 @media (prefers-reduced-motion: reduce) {
   [data-entrance] .w > span,
   [data-fade-late],
   [data-scale-in],
-  [data-highlight] .hw {
+  [data-highlight] .hw,
+  [data-trigger-highlight] .tw {
     transition: none;
     transform: none;
     opacity: 1;
