@@ -127,10 +127,6 @@ const {
       // Cinematic entrance: split into masked words, stagger in on view.
       const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       document.querySelectorAll<HTMLElement>('[data-entrance]').forEach((el) => {
-        if (reduceMotion) {
-          el.classList.add('is-in');
-          return;
-        }
         const delay = Number(el.dataset.entranceDelay ?? 0);
         const step = Number(el.dataset.entranceStep ?? 55);
         const words = el.textContent?.split(/\s+/).filter(Boolean) ?? [];
@@ -139,13 +135,27 @@ const {
           .map((w, i) => `<span class="w"><span style="transition-delay:${delay + i * step}ms">${w}</span></span>`)
           .join(' ');
         el.setAttribute('aria-label', label);
+        if (reduceMotion) {
+          el.classList.add('is-in');
+          if (el.hasAttribute('data-green')) {
+            el.querySelectorAll('.w').forEach((w) => w.classList.add('lit'));
+          }
+        }
       });
       const entranceObserver = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
-              entry.target.classList.add('is-in');
-              entranceObserver.unobserve(entry.target);
+              const target = entry.target as HTMLElement;
+              target.classList.add('is-in');
+              // Green statement highlight: stagger word light-up after
+              // the entrance lands. Timeout-driven, transition-rendered.
+              if (target.hasAttribute('data-green') && !reduceMotion) {
+                target.querySelectorAll('.w').forEach((w, i) => {
+                  setTimeout(() => w.classList.add('lit'), 550 + i * 110);
+                });
+              }
+              entranceObserver.unobserve(target);
             }
           });
         },

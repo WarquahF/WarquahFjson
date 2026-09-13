@@ -43,6 +43,7 @@
   --signal: #96690f;
   --signal-dim: #c9a86a;
   --signal-ghost: rgba(150, 105, 15, 0.08);
+  --go: #177245;
 
   /* type — San Francisco first everywhere, quality fallbacks after */
   --font-display:
@@ -481,6 +482,17 @@ ul {
   transform: translateY(0);
   opacity: 1;
 }
+/* Green statement highlight: tiny paint area, transition-only —
+   comfortably 60fps. */
+[data-green] .w > span {
+  transition:
+    transform 0.9s var(--cinematic, ease),
+    opacity 0.6s ease,
+    color 0.5s ease;
+}
+[data-green] .w.lit > span {
+  color: var(--go);
+}
 [data-fade-late] {
   opacity: 0;
   transform: translateY(12px);
@@ -633,6 +645,7 @@ a:hover .link-arrow {
 
 @media (prefers-reduced-motion: reduce) {
   [data-entrance] .w > span,
+  [data-green] .w > span,
   [data-fade-late],
   [data-scale-in],
   [data-highlight] .hw,
