@@ -60,6 +60,9 @@ const tech: { name: string; icon: string }[] = [
     display: flex;
     width: max-content;
     animation: loop-scroll 60s linear infinite;
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
   }
 
   .loop-copy {
@@ -71,7 +74,7 @@ const tech: { name: string; icon: string }[] = [
     display: inline-flex;
     align-items: center;
     white-space: nowrap;
-    padding-right: 3rem;
+    padding-right: 5rem;
   }
 
   .loop-logo {
