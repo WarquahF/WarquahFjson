@@ -6,7 +6,7 @@ const linkFor = (href: string) =>
   !isHome && href.startsWith('#') ? `/${href}` : href;
 ---
 
-<header class="nav glass">
+<header class="nav">
   <a class="nav-mark mono" href={linkFor('#home')} aria-label="Home">
     <span class="nav-mark-box">W</span>
     <span class="nav-mark-name">WARQUAH FAIZ</span>
@@ -37,11 +37,9 @@ const linkFor = (href: string) =>
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    padding: 0.75rem clamp(1.25rem, 5vw, 3.5rem);
-    border: none;
-    border-bottom: 1px solid var(--line);
-    border-radius: 0;
-    box-shadow: none;
+    padding: 0.7rem clamp(1.25rem, 5vw, 3.5rem);
+    border-bottom: 1px solid transparent;
+    background: transparent;
   }
 
   .nav-mark {

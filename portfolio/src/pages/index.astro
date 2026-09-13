@@ -2,9 +2,11 @@
 import Layout from '../layouts/Layout.astro';
 import Nav from '../components/Nav.astro';
 import Hero from '../components/Hero.astro';
+import Statement from '../components/Statement.astro';
 import About from '../components/About.astro';
 import Projects from '../components/Projects.astro';
 import Status from '../components/Status.astro';
+import Closing from '../components/Closing.astro';
 import Contact from '../components/Contact.astro';
 import Footer from '../components/Footer.astro';
 import ProjectPanel from '../components/svelte/ProjectPanel.svelte';
@@ -13,9 +15,11 @@ import ProjectPanel from '../components/svelte/ProjectPanel.svelte';
 <Layout>
   <Nav />
   <Hero />
+  <Statement />
   <About />
   <Projects />
   <Status />
+  <Closing />
   <Contact />
   <Footer />
   <ProjectPanel client:idle />

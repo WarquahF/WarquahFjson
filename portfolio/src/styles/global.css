@@ -454,3 +454,146 @@ ul {
   margin: 0;
   padding: 0;
 }
+
+/* ---- cinematic motion system -------------------------------------------
+   One language: transform + opacity only. Staged reveals, scroll
+   highlighting, parallax, full-screen statements. GPU-friendly. */
+
+:root {
+  --cinematic: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Staged entrance: words rise with clip, lines fade */
+[data-entrance] .w {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+[data-entrance] .w > span {
+  display: inline-block;
+  transform: translateY(110%);
+  opacity: 0;
+  transition:
+    transform 0.9s var(--cinematic, ease),
+    opacity 0.6s ease;
+}
+[data-entrance].is-in .w > span {
+  transform: translateY(0);
+  opacity: 1;
+}
+[data-fade-late] {
+  opacity: 0;
+  transform: translateY(12px);
+  transition:
+    opacity 0.7s ease,
+    transform 0.7s var(--cinematic, ease);
+}
+[data-fade-late].is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Scroll-highlight storytelling: muted -> ink word by word */
+[data-highlight] .hw {
+  color: var(--ink-faint);
+  opacity: 0.55;
+  transition:
+    color 0.45s ease,
+    opacity 0.45s ease;
+}
+[data-highlight] .hw.lit {
+  color: var(--ink);
+  opacity: 1;
+}
+
+/* Layered scroll choreography */
+[data-drift] {
+  will-change: transform, opacity;
+}
+[data-scale-in] {
+  transform: scale(0.96);
+  opacity: 0.4;
+  transition:
+    transform 0.9s var(--cinematic, ease),
+    opacity 0.7s ease;
+}
+[data-scale-in].is-in {
+  transform: scale(1);
+  opacity: 1;
+}
+
+/* Full-screen statement moments */
+.stage {
+  min-height: 88svh;
+  display: flex;
+  align-items: center;
+  padding: clamp(4rem, 10vw, 8rem) clamp(1.25rem, 5vw, 3.5rem);
+  border-bottom: 1px solid var(--line);
+}
+.stage-inner {
+  max-width: var(--wide-w);
+  margin: 0 auto;
+  width: 100%;
+}
+.stage-label {
+  font-family: var(--font-mono);
+  font-size: var(--step--2);
+  color: var(--ink-faint);
+  letter-spacing: 0.06em;
+  margin-bottom: var(--space-lg);
+}
+.stage-statement {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5.2vw, 3.75rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  max-width: 22ch;
+  color: var(--ink);
+  margin: 0;
+}
+.stage-sub {
+  margin-top: var(--space-lg);
+  max-width: 46ch;
+  font-size: var(--step-0);
+  line-height: 1.65;
+}
+
+/* Tactile buttons + alive links */
+.btn, .nav-links a, .contact-links a, .record-open, .panel-link {
+  -webkit-tap-highlight-color: transparent;
+}
+.btn:active {
+  transform: scale(0.97);
+}
+.link-arrow {
+  display: inline-block;
+  transition: transform 0.25s var(--cinematic, ease);
+}
+a:hover .link-arrow {
+  transform: translateX(4px);
+}
+
+/* Nav scroll state */
+.nav {
+  transition:
+    background-color 0.35s ease,
+    border-color 0.35s ease,
+    backdrop-filter 0.35s ease;
+}
+.nav.is-solid {
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  backdrop-filter: blur(16px) saturate(130%);
+  -webkit-backdrop-filter: blur(16px) saturate(130%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-entrance] .w > span,
+  [data-fade-late],
+  [data-scale-in],
+  [data-highlight] .hw {
+    transition: none;
+    transform: none;
+    opacity: 1;
+    color: var(--ink);
+  }
+}

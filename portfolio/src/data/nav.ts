@@ -3,7 +3,7 @@ export type NavItem = { label: string; href: string; index: string };
 export const sections: NavItem[] = [
   { label: 'Home', href: '#home', index: '00' },
   { label: 'About', href: '#about', index: '01' },
-  { label: 'Projects', href: '#projects', index: '02' },
+  { label: 'Work', href: '#work', index: '02' },
   { label: 'Status', href: '#status', index: '03' },
   { label: 'Notes', href: '/notes', index: '04' },
   { label: 'Contact', href: '#contact', index: '05' },

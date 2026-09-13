@@ -4,35 +4,46 @@ import { social } from '../data/nav';
 
 <section class="hero" data-reveal>
   <div class="hero-inner">
-    <p class="hero-kicker mono">Warquah Faiz — Student Developer</p>
+    <p class="hero-kicker mono" data-fade-late>Warquah Faiz — Student Developer</p>
 
-    <h1 class="hero-title" data-text-reveal>
-      Student developer exploring how software works.
+    <h1 class="hero-title" data-entrance data-entrance-step="60">
+      Software that respects your machine.
     </h1>
 
-    <p class="hero-sub">
-      Building software. Studying systems. Documenting what I learn.
+    <p class="hero-sub" data-fade-late>
+      I build desktop software and developer tools — local-first, fast,
+      and simple. Currently deep in the Blink Tauri migration.
     </p>
 
-    <div class="hero-actions">
-      <a class="btn btn-primary mono" href="#projects">View projects</a>
+    <div class="hero-actions" data-fade-late>
+      <a class="btn btn-primary mono" href="#work">View the work <span class="link-arrow">→</span></a>
       <a class="btn mono" href={social.github} target="_blank" rel="noreferrer">GitHub</a>
       <a class="btn mono" href="#contact">Contact</a>
     </div>
 
-    <p class="hero-meta mono">Based in Odisha, India · Open to projects</p>
+    <div class="hero-foot" data-fade-late>
+      <p class="hero-meta mono">Odisha, India · Open to projects</p>
+      <a class="scroll-cue mono" href="#statement" aria-label="Scroll to statement">
+        <span class="cue-line"></span>
+        <span>Scroll</span>
+      </a>
+    </div>
   </div>
 </section>
 
 <style>
   .hero {
-    padding: clamp(3rem, 8vw, 5.5rem) clamp(1.25rem, 5vw, 3.5rem) clamp(2.5rem, 5vw, 3.5rem);
+    min-height: 92svh;
+    display: flex;
+    align-items: flex-end;
+    padding: clamp(5rem, 10vw, 7rem) clamp(1.25rem, 5vw, 3.5rem) clamp(2rem, 4vw, 3rem);
     border-bottom: 1px solid var(--line);
     max-width: var(--wide-w);
   }
 
   .hero-inner {
-    max-width: 52rem;
+    max-width: 56rem;
+    width: 100%;
   }
 
   .hero-kicker {
@@ -43,18 +54,22 @@ import { social } from '../data/nav';
   }
 
   .hero-title {
-    font-size: var(--step-4);
-    max-width: 14ch;
+    font-family: var(--font-display);
+    font-size: clamp(2.75rem, 8.5vw, 6.25rem);
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+    max-width: 12ch;
     color: var(--ink);
-    line-height: 1.08;
+    margin: 0;
+    text-wrap: balance;
   }
 
   .hero-sub {
-    max-width: 42ch;
-    font-size: var(--step-0);
+    max-width: 44ch;
+    font-size: clamp(1rem, 1.4vw, 1.15rem);
     color: var(--ink-dim);
-    margin-top: var(--space-md);
-    line-height: 1.65;
+    margin-top: var(--space-lg);
+    line-height: 1.6;
   }
 
   .hero-actions {
@@ -71,30 +86,95 @@ import { social } from '../data/nav';
     color: var(--ink-dim);
     border: 1px solid var(--line-strong);
     border-radius: var(--radius);
-    padding: 0.5rem 0.9rem;
-    transition: color 0.2s var(--ease-out), border-color 0.2s var(--ease-out), transform 0.2s var(--ease-out);
+    padding: 0.6rem 1.1rem;
+    transition:
+      color 0.25s var(--cinematic, ease),
+      border-color 0.25s var(--cinematic, ease),
+      background-color 0.25s var(--cinematic, ease),
+      transform 0.25s var(--cinematic, ease);
   }
 
   .btn:hover {
     color: var(--ink);
     border-color: var(--ink-faint);
-    transform: translateY(-1px);
+    transform: translateY(-1px) scale(1.01);
   }
 
   .btn-primary {
-    color: var(--bg);
-    background: var(--signal);
-    border-color: var(--signal);
+    background: #e8e6e0;
+    border-color: #e8e6e0;
+    color: #0b0b0d;
   }
 
   .btn-primary:hover {
-    color: var(--bg);
-    border-color: var(--signal);
-    filter: brightness(1.1);
+    color: #0b0b0d;
+    border-color: #fff;
+    background: #fff;
+  }
+
+  .hero-foot {
+    margin-top: var(--space-2xl);
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
   }
 
   .hero-meta {
-    margin-top: var(--space-2xl);
     font-size: var(--step--1);
     color: var(--ink-faint);
+    margin: 0;
   }
+
+  .scroll-cue {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: var(--step--2);
+    color: var(--ink-faint);
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    transition: color 0.25s ease;
+  }
+
+  .scroll-cue:hover {
+    color: var(--ink);
+  }
+
+  .cue-line {
+    width: 1px;
+    height: 2.5rem;
+    background: var(--line-strong);
+    position: relative;
+    overflow: hidden;
+    display: block;
+  }
+
+  .cue-line::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--signal);
+    animation: cue-drop 2.2s var(--cinematic, ease) infinite;
+  }
+
+  @keyframes cue-drop {
+    0% { transform: translateY(-100%); }
+    55% { transform: translateY(0); }
+    100% { transform: translateY(100%); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cue-line::after { animation: none; }
+  }
+
+  @media (max-width: 640px) {
+    .hero {
+      min-height: 86svh;
+    }
+    .hero-title {
+      letter-spacing: -0.02em;
+    }
+  }
+</style>

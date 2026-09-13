@@ -21,7 +21,7 @@
       label: p.name,
       hint: 'project',
       action: () => {
-        goTo('#projects');
+        goTo('#work');
         setTimeout(() => window.dispatchEvent(new CustomEvent('open-project', { detail: p.slug })), 250);
       },
     })),

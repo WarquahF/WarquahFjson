@@ -123,6 +123,102 @@ const {
         { threshold: 0.35 }
       );
       textRevealEls.forEach((el) => textRevealObserver.observe(el));
+
+      // Cinematic entrance: split into masked words, stagger in on view.
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      document.querySelectorAll<HTMLElement>('[data-entrance]').forEach((el) => {
+        if (reduceMotion) {
+          el.classList.add('is-in');
+          return;
+        }
+        const delay = Number(el.dataset.entranceDelay ?? 0);
+        const step = Number(el.dataset.entranceStep ?? 55);
+        const words = el.textContent?.split(/\s+/).filter(Boolean) ?? [];
+        const label = words.join(' ');
+        el.innerHTML = words
+          .map((w, i) => `<span class="w"><span style="transition-delay:${delay + i * step}ms">${w}</span></span>`)
+          .join(' ');
+        el.setAttribute('aria-label', label);
+      });
+      const entranceObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-in');
+              entranceObserver.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.3 }
+      );
+      document.querySelectorAll('[data-entrance],[data-fade-late],[data-scale-in]').forEach((el) =>
+        entranceObserver.observe(el)
+      );
+
+      // Scroll-highlight storytelling: light words as they cross mid-viewport.
+      const highlightEls = Array.from(document.querySelectorAll<HTMLElement>('[data-highlight]'));
+      highlightEls.forEach((el) => {
+        const words = el.textContent?.split(/\s+/).filter(Boolean) ?? [];
+        const label = words.join(' ');
+        el.innerHTML = words.map((w) => `<span class="hw">${w}</span>`).join(' ');
+        el.setAttribute('aria-label', label);
+      });
+      const paintHighlights = () => {
+        const vh = window.innerHeight;
+        highlightEls.forEach((el) => {
+          const words = Array.from(el.querySelectorAll('.hw'));
+          if (!words.length) return;
+          const rect = el.getBoundingClientRect();
+          const progress = Math.min(1, Math.max(0, (vh * 0.82 - rect.top) / (rect.height + vh * 0.3)));
+          const lit = Math.floor(progress * (words.length + 1));
+          words.forEach((w, i) => w.classList.toggle('lit', reduceMotion || i < lit));
+        });
+      };
+      let highlightTick = false;
+      const onScrollPaint = () => {
+        if (highlightTick) return;
+        highlightTick = true;
+        requestAnimationFrame(() => {
+          paintHighlights();
+          highlightTick = false;
+        });
+      };
+      window.addEventListener('scroll', onScrollPaint, { passive: true });
+      window.addEventListener('resize', onScrollPaint);
+      paintHighlights();
+
+      // Gentle parallax drift (transform-only, rAF-throttled).
+      const driftEls = Array.from(document.querySelectorAll<HTMLElement>('[data-drift]'));
+      const paintDrift = () => {
+        if (reduceMotion || !driftEls.length) return;
+        const vh = window.innerHeight;
+        driftEls.forEach((el) => {
+          const speed = Number(el.dataset.drift ?? 0.06);
+          const rect = el.getBoundingClientRect();
+          const center = rect.top + rect.height / 2 - vh / 2;
+          el.style.transform = `translate3d(0, ${(-center * speed).toFixed(1)}px, 0)`;
+        });
+      };
+      let driftTick = false;
+      window.addEventListener(
+        'scroll',
+        () => {
+          if (driftTick) return;
+          driftTick = true;
+          requestAnimationFrame(() => {
+            paintDrift();
+            driftTick = false;
+          });
+        },
+        { passive: true }
+      );
+      paintDrift();
+
+      // Nav: transparent at top, solid once scrolling.
+      const nav = document.querySelector('.nav');
+      const paintNav = () => nav?.classList.toggle('is-solid', window.scrollY > 24);
+      window.addEventListener('scroll', paintNav, { passive: true });
+      paintNav();
     </script>
 
     <style is:global>
