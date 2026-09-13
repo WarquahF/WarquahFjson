@@ -147,7 +147,7 @@
   .scrim {
     position: fixed;
     inset: 0;
-    background: rgba(11, 11, 13, 0.6);
+    background: rgba(26, 26, 24, 0.28);
     backdrop-filter: blur(2px);
     z-index: 95;
     animation: fade-in 0.12s ease;

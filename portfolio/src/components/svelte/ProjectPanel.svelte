@@ -96,7 +96,7 @@
   .scrim {
     position: fixed;
     inset: 0;
-    background: rgba(11, 11, 13, 0.65);
+    background: rgba(26, 26, 24, 0.32);
     backdrop-filter: blur(2px);
     z-index: 90;
     animation: fade-in 0.15s ease;

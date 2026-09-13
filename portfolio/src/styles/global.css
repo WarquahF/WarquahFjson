@@ -32,17 +32,17 @@
 }
 
 :root {
-  /* color */
-  --bg: #0b0b0d;
-  --bg-raised: #131316;
-  --line: #1e1d23;
-  --line-strong: #2e2d35;
-  --ink: #ededef;
-  --ink-dim: #8b8b93;
-  --ink-faint: #59585f;
-  --signal: #d9a65c;
-  --signal-dim: #7a6640;
-  --signal-ghost: rgba(217, 166, 92, 0.08);
+  /* color — warm paper light system */
+  --bg: #f5f5f2;
+  --bg-raised: #ffffff;
+  --line: #e4e3dc;
+  --line-strong: #d2d1c8;
+  --ink: #1a1a18;
+  --ink-dim: #5c5c56;
+  --ink-faint: #9b9a90;
+  --signal: #96690f;
+  --signal-dim: #c9a86a;
+  --signal-ghost: rgba(150, 105, 15, 0.08);
 
   /* type — San Francisco first everywhere, quality fallbacks after */
   --font-display:
@@ -81,7 +81,7 @@
   --wide-w: 60rem;
   --radius: 3px;
 
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -126,8 +126,8 @@ body {
 }
 
 ::selection {
-  background: var(--signal);
-  color: #14110a;
+  background: var(--ink);
+  color: var(--bg);
 }
 
 a {
@@ -332,13 +332,13 @@ p {
    their own lighter treatment. */
 
 .glass {
-  background: color-mix(in srgb, var(--bg-raised) 65%, transparent);
-  backdrop-filter: blur(16px) saturate(140%);
-  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  background: color-mix(in srgb, var(--bg-raised) 78%, transparent);
+  backdrop-filter: blur(16px) saturate(130%);
+  -webkit-backdrop-filter: blur(16px) saturate(130%);
   border: 1px solid var(--line);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.04),
-    0 12px 40px rgba(0, 0, 0, 0.35);
+    inset 0 1px 0 rgba(255, 255, 255, 0.6),
+    0 12px 32px rgba(26, 26, 24, 0.08);
 }
 
 /* ---- text reveal ----------------------------------------------------- */
@@ -581,9 +581,26 @@ a:hover .link-arrow {
     backdrop-filter 0.35s ease;
 }
 .nav.is-solid {
-  background: color-mix(in srgb, var(--bg) 82%, transparent);
-  backdrop-filter: blur(16px) saturate(130%);
-  -webkit-backdrop-filter: blur(16px) saturate(130%);
+  background: color-mix(in srgb, var(--bg) 86%, transparent);
+  backdrop-filter: blur(14px) saturate(120%);
+  -webkit-backdrop-filter: blur(14px) saturate(120%);
+  border-bottom-color: var(--line);
+}
+
+/* Subtle tonal rhythm between sections */
+#about,
+#status {
+  background: var(--bg-raised);
+}
+#work,
+#contact {
+  background: var(--bg);
+}
+.stage {
+  background: var(--bg);
+}
+#closing {
+  background: #fafaf7;
 }
 
 @media (prefers-reduced-motion: reduce) {
