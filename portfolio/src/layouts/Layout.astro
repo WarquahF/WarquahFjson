@@ -168,8 +168,21 @@ const {
         highlightEls.forEach((el) => {
           const words = Array.from(el.querySelectorAll('.hw'));
           if (!words.length) return;
-          const rect = el.getBoundingClientRect();
-          const progress = Math.min(1, Math.max(0, (vh * 0.82 - rect.top) / (rect.height + vh * 0.3)));
+          // Pinned stages: drive progress from the tall section's travel,
+          // so words light while the statement holds still.
+          const section = el.closest('section');
+          const sectionRect = section?.getBoundingClientRect();
+          let progress: number;
+          if (sectionRect && sectionRect.height > vh * 1.2) {
+            const travel = sectionRect.height - vh;
+            progress = Math.min(1, Math.max(0, -sectionRect.top / travel));
+            // Ease the ends: first word lights shortly after pin, last
+            // word completes just before release.
+            progress = Math.min(1, Math.max(0, (progress - 0.08) / 0.84));
+          } else {
+            const rect = el.getBoundingClientRect();
+            progress = Math.min(1, Math.max(0, (vh * 0.82 - rect.top) / (rect.height + vh * 0.3)));
+          }
           const lit = Math.floor(progress * (words.length + 1));
           words.forEach((w, i) => w.classList.toggle('lit', reduceMotion || i < lit));
         });

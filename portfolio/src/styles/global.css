@@ -253,7 +253,7 @@ main {
 /* ---- sections ---------------------------------------------------------- */
 
 .section {
-  padding: clamp(3rem, 7vw, 6rem) clamp(1.25rem, 5vw, 3.5rem);
+  padding: clamp(4.5rem, 10vw, 8.5rem) clamp(1.25rem, 5vw, 3.5rem);
   border-bottom: 1px solid var(--line);
 }
 
@@ -522,18 +522,29 @@ ul {
   opacity: 1;
 }
 
-/* Full-screen statement moments */
+/* Full-screen statement moments — pinned: the statement holds still
+   in the viewport while scroll progress lights its words. */
 .stage {
-  min-height: 88svh;
-  display: flex;
-  align-items: center;
-  padding: clamp(4rem, 10vw, 8rem) clamp(1.25rem, 5vw, 3.5rem);
+  min-height: 190svh;
+  padding: 0 clamp(1.25rem, 5vw, 3.5rem);
   border-bottom: 1px solid var(--line);
 }
 .stage-inner {
   max-width: var(--wide-w);
   margin: 0 auto;
   width: 100%;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: sticky;
+  top: 0;
+  padding: clamp(3rem, 8vw, 5rem) 0;
+}
+@media (max-width: 640px) {
+  .stage {
+    min-height: 150svh;
+  }
 }
 .stage-label {
   font-family: var(--font-mono);

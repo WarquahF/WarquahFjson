@@ -33,50 +33,52 @@ import { social } from '../data/nav';
 
 <style>
   .hero {
-    min-height: 92svh;
+    min-height: 96svh;
     display: flex;
     align-items: flex-end;
-    padding: clamp(5rem, 10vw, 7rem) clamp(1.25rem, 5vw, 3.5rem) clamp(2rem, 4vw, 3rem);
+    padding: clamp(6rem, 12vw, 9rem) clamp(1.25rem, 5vw, 3.5rem) clamp(2.5rem, 5vw, 4rem);
     border-bottom: 1px solid var(--line);
     max-width: var(--wide-w);
   }
 
   .hero-inner {
-    max-width: 56rem;
+    max-width: 60rem;
     width: 100%;
   }
 
   .hero-kicker {
-    font-size: var(--step--1);
+    font-size: var(--step--2);
     color: var(--ink-faint);
-    letter-spacing: 0.04em;
-    margin: 0 0 var(--space-lg);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin: 0 0 var(--space-xl);
   }
 
   .hero-title {
     font-family: var(--font-display);
-    font-size: clamp(2.75rem, 8.5vw, 6.25rem);
-    line-height: 1.02;
-    letter-spacing: -0.03em;
-    max-width: 12ch;
+    font-size: clamp(3rem, 10vw, 7.25rem);
+    font-weight: 650;
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+    max-width: 11ch;
     color: var(--ink);
     margin: 0;
     text-wrap: balance;
   }
 
   .hero-sub {
-    max-width: 44ch;
-    font-size: clamp(1rem, 1.4vw, 1.15rem);
+    max-width: 40ch;
+    font-size: clamp(1.05rem, 1.5vw, 1.25rem);
     color: var(--ink-dim);
-    margin-top: var(--space-lg);
-    line-height: 1.6;
+    margin-top: var(--space-xl);
+    line-height: 1.55;
   }
 
   .hero-actions {
     display: flex;
     flex-wrap: wrap;
     gap: 0.6rem;
-    margin-top: var(--space-xl);
+    margin-top: var(--space-2xl);
   }
 
   .btn {
