@@ -14,6 +14,12 @@ export type Project = {
    *  in the project detail panel. Steps in the same array index render
    *  side by side as a branch (e.g. two providers off one router). */
   flow?: FlowStep[][];
+  /** Optional pipeline stages, rendered as large stacked typography in
+   *  the feature visual (e.g. Understand / Translate / Validate). */
+  stages?: string[];
+  /** Optional single emphasized line under the summary, rendered with
+   *  the viewport-triggered highlight system. `|` separates phrases. */
+  line?: string;
 };
 
 export const projects: Project[] = [
@@ -44,6 +50,29 @@ export const projects: Project[] = [
       [{ label: 'Response' }],
       [{ label: 'Encrypted SQLite log' }],
     ],
+  },
+  {
+    slug: 'zest-tty',
+    name: 'Zest-TTY',
+    kind: 'Developer tooling · Transpiler',
+    summary:
+      'Source-to-Odin transpiler that converts supported code into validated Odin code.',
+    detail:
+      'Zest-TTY is deterministic — no AI layer. Supported source goes through a typed intermediate representation and expression passes, and the Odin emitter output goes through validation. The MVP covers a documented subset on purpose: unsupported constructs degrade honestly into warnings and TODO-style output instead of pretending to work.',
+    points: [
+      'Understand → Translate → Validate pipeline',
+      'Line/parser processing into a typed intermediate representation',
+      'Expression passes plus an Odin emitter and validation path',
+      'Documented subset; honest TODO/warning degradation outside it',
+      'Deterministic tests with a canonical test gate',
+      'Cross-platform releases: Linux x86_64, macOS x86_64/ARM64, Windows x86_64',
+      'Version stamping, SHA256 checksums, SBOMs and installers',
+      'Deterministic by design — no AI layer',
+    ],
+    stack: ['Odin', 'CLI', 'Transpiler', 'Cross-platform'],
+    featured: true,
+    stages: ['Understand', 'Translate', 'Validate'],
+    line: 'Source code becomes | something the target language | can validate.',
   },
   {
     slug: 'nugget',
