@@ -73,6 +73,14 @@ export const projects: Project[] = [
     featured: true,
     stages: ['Understand', 'Translate', 'Validate'],
     line: 'Source code becomes | something the target language | can validate.',
+    flow: [
+      [{ label: 'Source' }],
+      [{ label: 'Parser / line processing' }],
+      [{ label: 'Typed IR' }],
+      [{ label: 'Expression passes' }],
+      [{ label: 'Odin emitter' }],
+      [{ label: 'Validation', branch: true }],
+    ],
   },
   {
     slug: 'nugget',

@@ -1,45 +1,67 @@
 ---
-const tech = [
-  'Odin',
-  'Rust',
-  'C++',
-  'Python',
-  'JavaScript',
-  'TypeScript',
-  'HTML',
-  'CSS',
-  'Shell',
+// Editorial technology marquee: official monochrome logos + names in a
+// seamless CSS-only loop. Independent of page scroll. Logos degrade to
+// name-only if a source ever fails.
+const DEVICON = 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons';
+const tech: { name: string; icon: string }[] = [
+  { name: 'Odin', icon: 'https://cdn.simpleicons.org/odin' },
+  { name: 'Rust', icon: `${DEVICON}/rust/rust-original.svg` },
+  { name: 'C++', icon: `${DEVICON}/cplusplus/cplusplus-original.svg` },
+  { name: 'Python', icon: `${DEVICON}/python/python-original.svg` },
+  { name: 'JavaScript', icon: `${DEVICON}/javascript/javascript-original.svg` },
+  { name: 'TypeScript', icon: `${DEVICON}/typescript/typescript-original.svg` },
+  { name: 'HTML', icon: `${DEVICON}/html5/html5-original.svg` },
+  { name: 'CSS', icon: `${DEVICON}/css3/css3-original.svg` },
+  { name: 'Shell', icon: `${DEVICON}/bash/bash-original.svg` },
+  { name: 'GitHub', icon: `${DEVICON}/github/github-original.svg` },
+  { name: 'Docker', icon: `${DEVICON}/docker/docker-original.svg` },
+  { name: 'Kubernetes', icon: `${DEVICON}/kubernetes/kubernetes-plain.svg` },
 ];
 ---
 
-<section class="loop" aria-label="Languages and technologies">
+<section class="loop" aria-label="Languages and tools">
   <div class="loop-track">
     {[0, 1].map((copy) => (
       <div class="loop-copy" aria-hidden={copy === 1}>
         {tech.map((t) => (
-          <span class="loop-item">{t}<span class="loop-dot">·</span></span>
+          <span class="loop-item">
+            <img
+              class="loop-logo"
+              src={t.icon}
+              alt=""
+              width="22"
+              height="22"
+              loading="lazy"
+            />
+            <span class="loop-name">{t.name}</span>
+            <span class="loop-dot">·</span>
+          </span>
         ))}
       </div>
     ))}
   </div>
 </section>
 
+<script>
+  // Astro islands: this inline script runs per page load. Purely
+  // progressive enhancement — the loop animates via CSS regardless.
+  document.querySelectorAll<HTMLImageElement>('.loop-logo').forEach((img) => {
+    img.addEventListener('error', () => img.remove());
+  });
+</script>
+
 <style>
   .loop {
     border-bottom: 1px solid var(--line);
     overflow: hidden;
-    padding: var(--space-xl) 0;
+    padding: var(--space-lg) 0;
     background: var(--bg);
   }
 
   .loop-track {
     display: flex;
     width: max-content;
-    animation: loop-scroll 46s linear infinite;
-  }
-
-  .loop:hover .loop-track {
-    animation-play-state: paused;
+    animation: loop-scroll 60s linear infinite;
   }
 
   .loop-copy {
@@ -48,24 +70,44 @@ const tech = [
   }
 
   .loop-item {
-    font-family: var(--font-display);
-    font-size: clamp(1.5rem, 3.4vw, 2.5rem);
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    color: var(--ink-faint);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
     white-space: nowrap;
-    padding-right: 0.6em;
+    padding-right: 2.25rem;
+  }
+
+  .loop-logo {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+    filter: grayscale(1);
+    opacity: 0.5;
+    transition: opacity 0.25s ease, transform 0.25s var(--cinematic, ease);
+  }
+
+  .loop-item:hover .loop-logo {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+
+  .loop-name {
+    font-family: var(--font-display);
+    font-size: clamp(1.25rem, 2.6vw, 1.9rem);
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    color: var(--ink-faint);
     transition: color 0.25s ease;
   }
 
-  .loop-item:hover {
+  .loop-item:hover .loop-name {
     color: var(--ink);
   }
 
   .loop-dot {
     color: var(--line-strong);
-    padding-left: 0.6em;
     font-weight: 400;
+    padding-left: 1.7rem;
   }
 
   @keyframes loop-scroll {

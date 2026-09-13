@@ -58,8 +58,23 @@
       {/each}
     </ul>
 
+    {#if project.stages}
+      <div class="panel-stages" aria-label="Core philosophy">
+        <p class="mono panel-caption">Philosophy</p>
+        <div class="stages-row mono">
+          {#each project.stages as stage, si}
+            <span class="pstage">{stage}</span>
+            {#if si < project.stages.length - 1}
+              <span class="pstage-arrow" aria-hidden="true">→</span>
+            {/if}
+          {/each}
+        </div>
+      </div>
+    {/if}
+
     {#if project.flow}
-      <div class="flow" aria-label="Request flow diagram">
+      <div class="flow" aria-label="Pipeline diagram">
+        <p class="mono panel-caption">Pipeline</p>
         {#each project.flow as row, rowIndex}
           <div class="flow-row" style="justify-content: {row.length > 1 ? 'space-between' : 'flex-start'}">
             {#each row as step}
@@ -214,6 +229,41 @@
     margin-top: var(--space-lg);
     padding-top: var(--space-lg);
     border-top: 1px solid var(--line);
+  }
+
+  .panel-caption {
+    font-size: var(--step--2);
+    color: var(--ink-faint);
+    letter-spacing: 0.06em;
+    margin: 0 0 var(--space-sm);
+  }
+
+  .panel-stages {
+    margin-top: var(--space-lg);
+    padding-top: var(--space-lg);
+    border-top: 1px solid var(--line);
+  }
+
+  .stages-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+
+  .pstage {
+    font-size: var(--step--1);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--ink);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    padding: 0.4rem 0.7rem;
+  }
+
+  .pstage-arrow {
+    color: var(--ink-faint);
+    font-size: var(--step--1);
   }
 
   .panel-stack {
