@@ -29,10 +29,11 @@ const tech: { name: string; icon: string }[] = [
               class="loop-logo"
               src={t.icon}
               alt={t.name}
-              width="24"
-              height="24"
+              width="30"
+              height="30"
               loading="lazy"
             />
+            <span class="loop-dot" aria-hidden="true">·</span>
           </span>
         ))}
       </div>
@@ -74,12 +75,12 @@ const tech: { name: string; icon: string }[] = [
     display: inline-flex;
     align-items: center;
     white-space: nowrap;
-    padding-right: 5rem;
+    padding-right: 2.5rem;
   }
 
   .loop-logo {
-    width: 24px;
-    height: 24px;
+    width: 30px;
+    height: 30px;
     object-fit: contain;
     filter: grayscale(1);
     opacity: 0.72;
@@ -89,6 +90,13 @@ const tech: { name: string; icon: string }[] = [
   .loop-item:hover .loop-logo {
     opacity: 1;
     transform: scale(1.1);
+  }
+
+  .loop-dot {
+    color: var(--line-strong);
+    font-size: 1.4rem;
+    font-weight: 400;
+    padding-left: 2.5rem;
   }
 
   @keyframes loop-scroll {
