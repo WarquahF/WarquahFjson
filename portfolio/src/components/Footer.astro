@@ -15,6 +15,7 @@ const homeHref = Astro.url.pathname === '/' ? '#home' : '/#home';
       <a href={homeHref}>Back to top ↑</a>
     </div>
   </div>
+  <p class="footer-signoff">alright bro you actually read the whole thing?? say hi then 👋</p>
 </footer>
 
 <style>
@@ -45,6 +46,14 @@ const homeHref = Astro.url.pathname === '/' ? '#home' : '/#home';
     flex-wrap: wrap;
     justify-content: space-between;
     gap: 0.75rem;
+  }
+
+  .footer-signoff {
+    margin-top: var(--space-xl);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--line);
+    font-size: var(--step--1);
+    color: var(--ink-faint);
   }
 
   .footer-links {
