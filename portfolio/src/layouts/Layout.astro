@@ -1,7 +1,6 @@
 ---
 import '../styles/global.css';
 import { sections } from '../data/nav';
-import Loader from '../components/svelte/Loader.svelte';
 import CommandPalette from '../components/svelte/CommandPalette.svelte';
 
 interface Props {
@@ -21,7 +20,14 @@ const {
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="color-scheme" content="light" />
-    <meta name="theme-color" content="#f5f5f2" />
+    <meta name="theme-color" content="#0d0d10" />
+    <script is:inline>
+      try {
+        document.documentElement.dataset.theme = localStorage.getItem('wf-theme') || 'dark';
+      } catch {
+        document.documentElement.dataset.theme = 'dark';
+      }
+    </script>
     <meta name="description" content={description} />
     <title>{title}</title>
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
@@ -39,8 +45,8 @@ const {
     )}
   </head>
   <body>
-    <Loader client:load />
-
+    <div class="progress" aria-hidden="true"></div>
+    <div class="grain" aria-hidden="true"></div>
     <div class="gutter-shell" id="home">
       <aside class="gutter" aria-label="Section index">
         <span class="mono gutter-side-label">W</span>
@@ -64,6 +70,14 @@ const {
     <CommandPalette client:idle />
 
     <script>
+      import { animate, inView, scroll, stagger } from 'motion';
+
+      // Motion engine: one calm language — transform + opacity only,
+      // hardware-accelerated at 60fps. Discrete class flips remain solely
+      // for scroll-scrubbed word lighting.
+      const EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
       const ticks = Array.from(document.querySelectorAll<HTMLElement>('.gutter-tick'));
       const targets = ticks
         .map((tick) => {
@@ -87,159 +101,163 @@ const {
         targets.forEach((t) => observer.observe(t.el));
       }
 
-      const revealEls = document.querySelectorAll<HTMLElement>('[data-reveal]');
-      const revealObserver = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('is-revealed');
-              revealObserver.unobserve(entry.target);
-            }
-          });
-        },
-        { threshold: 0.08 }
-      );
-      revealEls.forEach((el) => revealObserver.observe(el));
-
-      const textRevealEls = document.querySelectorAll<HTMLElement>('[data-text-reveal]');
-      textRevealEls.forEach((el, elIndex) => {
-        const words = el.textContent?.split(/\s+/).filter(Boolean) ?? [];
-        el.innerHTML = words
-          .map((w, i) => `<span class="word" style="transition-delay:${i * 25}ms">${w}</span>`)
-          .join(' ');
-        el.setAttribute('aria-label', words.join(' '));
-        if (elIndex === 0) el.setAttribute('role', 'text');
-      });
-
-      const textRevealObserver = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('is-revealed');
-              textRevealObserver.unobserve(entry.target);
-            }
-          });
-        },
-        { threshold: 0.35 }
-      );
-      textRevealEls.forEach((el) => textRevealObserver.observe(el));
-
-      // Cinematic entrance: split into masked words, stagger in on view.
-      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      // Word-mask prep for display entrances (one-time DOM work; Motion
+      // drives the animation, CSS only holds the pre-state + end state).
       document.querySelectorAll<HTMLElement>('[data-entrance]').forEach((el) => {
-        const delay = Number(el.dataset.entranceDelay ?? 0);
-        const step = Number(el.dataset.entranceStep ?? 55);
         const words = el.textContent?.split(/\s+/).filter(Boolean) ?? [];
         const label = words.join(' ');
         el.innerHTML = words
-          .map((w, i) => `<span class="w"><span style="transition-delay:${delay + i * step}ms">${w}</span></span>`)
+          .map((w) => `<span class="w"><span>${w}</span></span>`)
           .join(' ');
         el.setAttribute('aria-label', label);
-        if (reduceMotion) {
-          el.classList.add('is-in');
-          if (el.hasAttribute('data-green')) {
-            el.querySelectorAll('.w').forEach((w) => w.classList.add('lit'));
-          }
-        }
+        if (reduceMotion) el.classList.add('is-in');
       });
-      const entranceObserver = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              const target = entry.target as HTMLElement;
-              target.classList.add('is-in');
-              // Green statement highlight: stagger word light-up after
-              // the entrance lands. Timeout-driven, transition-rendered.
-              if (target.hasAttribute('data-green') && !reduceMotion) {
-                target.querySelectorAll('.w').forEach((w, i) => {
-                  setTimeout(() => w.classList.add('lit'), 550 + i * 110);
-                });
-              }
-              entranceObserver.unobserve(target);
-            }
-          });
-        },
-        { threshold: 0.3 }
-      );
-      document.querySelectorAll('[data-entrance],[data-fade-late],[data-scale-in]').forEach((el) =>
-        entranceObserver.observe(el)
-      );
 
-      // Scroll-highlight storytelling: light words as they cross mid-viewport.
-      const highlightEls = Array.from(document.querySelectorAll<HTMLElement>('[data-highlight]'));
-      highlightEls.forEach((el) => {
+      if (!reduceMotion) {
+        // Hero intro timeline: page rises, headline staggers in word by word.
+        if (document.querySelector('.hero')) {
+          animate('.hero[data-reveal]', { opacity: [0, 1], y: [18, 0] }, { duration: 0.9, ease: EASE });
+        }
+        const heroWords = document.querySelectorAll('.hero [data-entrance] .w > span');
+        if (heroWords.length) {
+          animate(
+            heroWords,
+            { y: ['110%', '0%'], opacity: [0, 1] },
+            { duration: 1, ease: EASE, delay: stagger(0.06, { startDelay: 0.2 }) }
+          );
+        }
+        const heroFades = document.querySelectorAll('.hero [data-fade-late]');
+        if (heroFades.length) {
+          animate(
+            heroFades,
+            { opacity: [0, 1], y: [14, 0] },
+            { duration: 0.8, ease: EASE, delay: stagger(0.09, { startDelay: 0.5 }) }
+          );
+        }
+
+        // Calm scroll reveals: everything below the hero fades up once.
+        // Initial states are set in JS so no-JS visitors still see content.
+        const batch = Array.from(
+          document.querySelectorAll<HTMLElement>(
+            '[data-reveal], [data-fade-late], [data-scale-in], [data-text-reveal]'
+          )
+        ).filter((el) => !el.closest('.hero'));
+        batch.forEach((el) => {
+          if (el.hasAttribute('data-scale-in')) {
+            animate(el, { opacity: 0, scale: 0.97 }, { duration: 0 });
+          } else {
+            animate(el, { opacity: 0, y: 16 }, { duration: 0 });
+          }
+        });
+        if (batch.length) {
+          inView(
+            batch,
+            (el) => {
+              if ((el as HTMLElement).hasAttribute('data-scale-in')) {
+                animate(el, { opacity: 1, scale: 1 }, { duration: 0.9, ease: EASE });
+              } else {
+                animate(el, { opacity: 1, y: 0 }, { duration: 0.8, ease: EASE });
+              }
+            },
+            { amount: 0.2, margin: '0px 0px -6% 0px' }
+          );
+        }
+
+        // Display entrances below the fold stagger in on first view.
+        document.querySelectorAll<HTMLElement>('[data-entrance]').forEach((el) => {
+          if (el.closest('.hero')) return;
+          const words = el.querySelectorAll('.w > span');
+          if (!words.length) return;
+          const step = Number(el.dataset.entranceStep ?? 55) / 1000;
+          inView(
+            el,
+            () => {
+              animate(
+                words,
+                { y: ['110%', '0%'], opacity: [0, 1] },
+                { duration: 0.9, ease: EASE, delay: stagger(step) }
+              );
+            },
+            { amount: 0.4 }
+          );
+        });
+      }
+
+      // Scroll progress hairline: bound straight to page scroll.
+      const progress = document.querySelector('.progress');
+      if (progress) {
+        scroll(animate(progress, { scaleX: [0, 1] }, { ease: 'linear' }));
+      }
+
+      if (!reduceMotion && window.matchMedia('(pointer: fine)').matches) {
+        // Magnetic primary buttons: drift toward the cursor, spring home.
+        document.querySelectorAll<HTMLElement>('.btn-primary').forEach((btn) => {
+          btn.addEventListener('pointermove', (e) => {
+            const r = btn.getBoundingClientRect();
+            animate(
+              btn,
+              {
+                x: (e.clientX - r.left - r.width / 2) * 0.14,
+                y: (e.clientY - r.top - r.height / 2) * 0.22,
+              },
+              { duration: 0.25, ease: 'easeOut' }
+            );
+          });
+          btn.addEventListener('pointerleave', () => {
+            animate(btn, { x: 0, y: 0 }, { type: 'spring', stiffness: 320, damping: 20 });
+          });
+        });
+      }
+
+      // Word-split prep for scroll-scrubbed statements (one-time DOM work).
+      document.querySelectorAll<HTMLElement>('[data-highlight]').forEach((el) => {
         const words = el.textContent?.split(/\s+/).filter(Boolean) ?? [];
         const label = words.join(' ');
         el.innerHTML = words.map((w) => `<span class="hw">${w}</span>`).join(' ');
         el.setAttribute('aria-label', label);
       });
-      const paintHighlights = () => {
-        const vh = window.innerHeight;
-        highlightEls.forEach((el) => {
+
+      if (reduceMotion) {
+        document.querySelectorAll('[data-highlight] .hw').forEach((w) => w.classList.add('lit'));
+      } else {
+        // Pinned statement moments: the section holds still (sticky CSS)
+        // while Motion binds word emphasis to scroll progress — no scroll
+        // listeners, ScrollTimeline-accelerated where supported.
+        document.querySelectorAll<HTMLElement>('[data-highlight]').forEach((el) => {
           const words = Array.from(el.querySelectorAll('.hw'));
           if (!words.length) return;
-          // Pinned stages: drive progress from the tall section's travel,
-          // so words light while the statement holds still.
-          const section = el.closest('section');
-          const sectionRect = section?.getBoundingClientRect();
-          let progress: number;
-          if (sectionRect && sectionRect.height > vh * 1.2) {
-            const travel = sectionRect.height - vh;
-            progress = Math.min(1, Math.max(0, -sectionRect.top / travel));
+          const section = el.closest('section') ?? el;
+          let lit = -1;
+          const paint = (progress: number) => {
             // Ease the ends: first word lights shortly after pin, last
             // word completes just before release.
-            progress = Math.min(1, Math.max(0, (progress - 0.08) / 0.84));
-          } else {
-            const rect = el.getBoundingClientRect();
-            progress = Math.min(1, Math.max(0, (vh * 0.82 - rect.top) / (rect.height + vh * 0.3)));
-          }
-          const lit = Math.floor(progress * (words.length + 1));
-          words.forEach((w, i) => w.classList.toggle('lit', reduceMotion || i < lit));
-        });
-      };
-      let highlightTick = false;
-      const onScrollPaint = () => {
-        if (highlightTick) return;
-        highlightTick = true;
-        requestAnimationFrame(() => {
-          paintHighlights();
-          highlightTick = false;
-        });
-      };
-      window.addEventListener('scroll', onScrollPaint, { passive: true });
-      window.addEventListener('resize', onScrollPaint);
-      paintHighlights();
-
-      // Gentle parallax drift (transform-only, rAF-throttled).
-      const driftEls = Array.from(document.querySelectorAll<HTMLElement>('[data-drift]'));
-      const paintDrift = () => {
-        if (reduceMotion || !driftEls.length) return;
-        const vh = window.innerHeight;
-        driftEls.forEach((el) => {
-          const speed = Number(el.dataset.drift ?? 0.06);
-          const rect = el.getBoundingClientRect();
-          const center = rect.top + rect.height / 2 - vh / 2;
-          el.style.transform = `translate3d(0, ${(-center * speed).toFixed(1)}px, 0)`;
-        });
-      };
-      let driftTick = false;
-      window.addEventListener(
-        'scroll',
-        () => {
-          if (driftTick) return;
-          driftTick = true;
-          requestAnimationFrame(() => {
-            paintDrift();
-            driftTick = false;
+            const eased = Math.min(1, Math.max(0, (progress - 0.08) / 0.84));
+            const count = Math.floor(eased * (words.length + 1));
+            if (count === lit) return;
+            lit = count;
+            words.forEach((w, i) => w.classList.toggle('lit', i < count));
+          };
+          paint(0);
+          scroll((progress) => paint(typeof progress === 'number' ? progress : 0), {
+            target: section,
+            offset: ['start start', 'end end'],
           });
-        },
-        { passive: true }
-      );
-      paintDrift();
+        });
+
+        // Gentle parallax drift (transform-only, scroll-bound).
+        document.querySelectorAll<HTMLElement>('[data-drift]').forEach((el) => {
+          const speed = Number(el.dataset.drift ?? 0.06);
+          const amp = Math.min(48, speed * 500);
+          scroll(animate(el, { y: [amp, -amp] }, { ease: 'linear' }), {
+            target: el.closest('section') ?? el,
+            offset: ['start end', 'end start'],
+          });
+        });
+      }
 
       // Viewport-triggered phrase highlighting: author phrases with
-      // `|` separators; each phrase lights fully when it crosses the
-      // trigger band (~middle viewport) and stays lit. Discrete events.
+      // `|` separators; each phrase lights fully when it enters view
+      // and stays lit. Discrete events.
       document.querySelectorAll<HTMLElement>('[data-trigger-highlight]').forEach((el) => {
         const full = el.textContent ?? '';
         el.setAttribute('aria-label', full.split('|').join(' ').replace(/\s+/g, ' ').trim());
@@ -255,24 +273,15 @@ const {
                 .join(' ')}</span>`
           )
           .join(' ');
-        if (reduceMotion) {
-          el.querySelectorAll('.tph').forEach((p) => p.classList.add('lit'));
-          return;
-        }
-        const triggerObserver = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting) {
-                entry.target.classList.add('lit');
-                triggerObserver.unobserve(entry.target);
-              }
-            });
-          },
-          // Trigger band centered ~50% viewport height.
-          { rootMargin: '-42% 0px -42% 0px', threshold: 0 }
-        );
-        el.querySelectorAll('.tph').forEach((p) => triggerObserver.observe(p));
       });
+
+      if (reduceMotion) {
+        document.querySelectorAll('[data-trigger-highlight] .tph').forEach((p) => p.classList.add('lit'));
+      } else {
+        document.querySelectorAll('.tph').forEach((p) => {
+          inView(p, () => p.classList.add('lit'), { amount: 0.6 });
+        });
+      }
 
       // Nav: transparent at top, solid once scrolling.
       const nav = document.querySelector('.nav');
@@ -282,22 +291,8 @@ const {
     </script>
 
     <style is:global>
-      [data-reveal] {
-        opacity: 0;
-        transform: translateY(10px);
-        transition: opacity 0.5s var(--ease, ease), transform 0.5s var(--ease, ease);
-      }
-      [data-reveal].is-revealed {
-        opacity: 1;
-        transform: none;
-      }
-      @media (prefers-reduced-motion: reduce) {
-        [data-reveal] {
-          opacity: 1;
-          transform: none;
-          transition: none;
-        }
-      }
+      /* Reveal + entrance states are driven by Motion (see script above).
+         No CSS-hidden defaults: no-JS visitors still see full content. */
     </style>
   </body>
 </html>

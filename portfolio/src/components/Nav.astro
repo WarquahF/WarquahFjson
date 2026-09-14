@@ -25,8 +25,33 @@ const linkFor = (href: string) =>
     <button class="nav-kbd mono" type="button" data-command-trigger aria-label="Open command palette">
       <span>⌘</span>K
     </button>
+    <button class="nav-theme" type="button" data-theme-toggle aria-label="Toggle color theme">
+      <svg class="icon-moon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" /></svg>
+      <svg class="icon-sun" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4" /></svg>
+    </button>
   </div>
 </header>
+
+<script>
+  const root = document.documentElement;
+  const meta = document.querySelector('meta[name="theme-color"]');
+  const paintMeta = () => {
+    meta?.setAttribute('content', root.dataset.theme === 'dark' ? '#0d0d10' : '#f5f5f2');
+  };
+  document.querySelectorAll('[data-theme-toggle]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+      root.dataset.theme = next;
+      try {
+        localStorage.setItem('wf-theme', next);
+      } catch {
+        /* private mode: theme just won't persist */
+      }
+      paintMeta();
+    });
+  });
+  paintMeta();
+</script>
 
 <style>
   .nav {
@@ -156,5 +181,33 @@ const linkFor = (href: string) =>
   .nav-kbd:hover {
     color: var(--ink);
     border-color: var(--ink-faint);
+  }
+
+  .nav-theme {
+    display: grid;
+    place-items: center;
+    width: 1.7rem;
+    height: 1.7rem;
+    color: var(--ink-faint);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    transition: border-color 0.2s var(--ease-out), color 0.2s var(--ease-out);
+  }
+
+  .nav-theme:hover {
+    color: var(--ink);
+    border-color: var(--ink-faint);
+  }
+
+  .nav-theme .icon-sun {
+    display: none;
+  }
+
+  [data-theme='dark'] .nav-theme .icon-sun {
+    display: block;
+  }
+
+  [data-theme='dark'] .nav-theme .icon-moon {
+    display: none;
   }
 </style>

@@ -6,7 +6,7 @@ import { social } from '../data/nav';
   <div class="hero-inner">
     <p class="hero-kicker mono" data-fade-late>Warquah Faiz — Student Developer</p>
 
-    <h1 class="hero-title" data-entrance data-entrance-step="60" data-green>
+    <h1 class="hero-title" data-entrance data-entrance-step="60">
       Software that respects your machine.
     </h1>
 
@@ -22,11 +22,7 @@ import { social } from '../data/nav';
     </div>
 
     <div class="hero-foot" data-fade-late>
-      <p class="hero-meta mono">Odisha, India · Open to projects</p>
-      <a class="scroll-cue mono" href="#statement" aria-label="Scroll to statement">
-        <span class="cue-line"></span>
-        <span>Scroll</span>
-      </a>
+      <p class="status-pill mono"><span class="pulse" aria-hidden="true"></span>Open to projects · Odisha, India</p>
     </div>
   </div>
 </section>
@@ -56,10 +52,10 @@ import { social } from '../data/nav';
 
   .hero-title {
     font-family: var(--font-display);
-    font-size: clamp(3rem, 10vw, 7.25rem);
-    font-weight: 800;
-    line-height: 0.96;
-    letter-spacing: -0.04em;
+    font-size: clamp(3.25rem, 10vw, 7.5rem);
+    font-weight: 700;
+    line-height: 1.0;
+    letter-spacing: -0.032em;
     max-width: 11ch;
     color: var(--ink);
     margin: 0;
@@ -89,17 +85,16 @@ import { social } from '../data/nav';
     border: 1px solid var(--line-strong);
     border-radius: var(--radius);
     padding: 0.6rem 1.1rem;
+    /* No transform transition: Motion owns button movement (magnetic pull). */
     transition:
       color 0.25s var(--cinematic, ease),
       border-color 0.25s var(--cinematic, ease),
-      background-color 0.25s var(--cinematic, ease),
-      transform 0.25s var(--cinematic, ease);
+      background-color 0.25s var(--cinematic, ease);
   }
 
   .btn:hover {
     color: var(--ink);
     border-color: var(--ink-faint);
-    transform: translateY(-1px) scale(1.01);
   }
 
   .btn-primary {
@@ -122,54 +117,46 @@ import { social } from '../data/nav';
     gap: 1rem;
   }
 
-  .hero-meta {
-    font-size: var(--step--1);
-    color: var(--ink-faint);
-    margin: 0;
-  }
-
-  .scroll-cue {
-    display: flex;
-    flex-direction: column;
+  .status-pill {
+    display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    font-size: var(--step--2);
-    color: var(--ink-faint);
-    text-decoration: none;
-    letter-spacing: 0.08em;
-    transition: color 0.25s ease;
+    gap: 0.6rem;
+    font-size: var(--step--1);
+    color: var(--ink-dim);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 0.45rem 0.95rem 0.45rem 0.75rem;
+    margin: 0;
+    background: color-mix(in srgb, var(--bg-raised) 60%, transparent);
   }
 
-  .scroll-cue:hover {
-    color: var(--ink);
+  .pulse {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--go);
+    animation: pulse 2.4s ease-out infinite;
   }
 
-  .cue-line {
-    width: 1px;
-    height: 2.5rem;
-    background: var(--line-strong);
-    position: relative;
-    overflow: hidden;
-    display: block;
-  }
-
-  .cue-line::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: var(--signal);
-    animation: cue-drop 2.2s var(--cinematic, ease) infinite;
-  }
-
-  @keyframes cue-drop {
-    0% { transform: translateY(-100%); }
-    55% { transform: translateY(0); }
-    100% { transform: translateY(100%); }
+  @keyframes pulse {
+    0% {
+      box-shadow: 0 0 0 0 color-mix(in srgb, var(--go) 55%, transparent);
+    }
+    70% {
+      box-shadow: 0 0 0 9px transparent;
+    }
+    100% {
+      box-shadow: 0 0 0 0 transparent;
+    }
   }
 
   @media (prefers-reduced-motion: reduce) {
-    .cue-line::after { animation: none; }
+    .pulse {
+      animation: none;
+    }
   }
+
+  /* Scroll cue removed — premium pages never say "scroll". */
 
   @media (max-width: 640px) {
     .hero {

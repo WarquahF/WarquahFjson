@@ -1,7 +1,7 @@
 ---
-// Editorial technology marquee: official monochrome logos + names in a
-// seamless CSS-only loop. Independent of page scroll. Logos degrade to
-// name-only if a source ever fails.
+// Specification sheet, not a marquee: the stack sits still in a calm
+// centered grid, Apple tech-specs style. Logos degrade to name-only
+// if a source ever fails.
 const DEVICON = 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons';
 const tech: { name: string; icon: string }[] = [
   { name: 'Odin', icon: 'https://cdn.simpleicons.org/odin' },
@@ -19,97 +19,68 @@ const tech: { name: string; icon: string }[] = [
 ];
 ---
 
-<section class="loop" aria-label="Languages and tools">
-  <div class="loop-track">
-    {[0, 1].map((copy) => (
-      <div class="loop-copy" aria-hidden={copy === 1}>
-        {tech.map((t) => (
-          <span class="loop-item" title={t.name}>
-            <img
-              class="loop-logo"
-              src={t.icon}
-              alt={t.name}
-              width="30"
-              height="30"
-              loading="lazy"
-            />
-            <span class="loop-dot" aria-hidden="true">·</span>
-          </span>
-        ))}
-      </div>
+<section class="stack" aria-label="Languages and tools">
+  <div class="stack-grid">
+    {tech.map((t) => (
+      <span class="stack-item" title={t.name}>
+        <img
+          class="stack-logo"
+          src={t.icon}
+          alt=""
+          width="22"
+          height="22"
+          loading="lazy"
+        />
+        <span class="stack-name mono">{t.name}</span>
+      </span>
     ))}
   </div>
 </section>
 
 <script>
-  // Astro islands: this inline script runs per page load. Purely
-  // progressive enhancement — the loop animates via CSS regardless.
-  document.querySelectorAll<HTMLImageElement>('.loop-logo').forEach((img) => {
+  document.querySelectorAll<HTMLImageElement>('.stack-logo').forEach((img) => {
     img.addEventListener('error', () => img.remove());
   });
 </script>
 
 <style>
-  .loop {
+  .stack {
     border-bottom: 1px solid var(--line);
-    overflow: hidden;
-    padding: var(--space-lg) 0;
+    padding: clamp(2.5rem, 5vw, 3.5rem) clamp(1.25rem, 5vw, 3.5rem);
     background: var(--bg);
   }
 
-  .loop-track {
+  .stack-grid {
+    max-width: var(--wide-w);
+    margin: 0 auto;
     display: flex;
-    width: max-content;
-    animation: loop-scroll 60s linear infinite;
-    will-change: transform;
-    transform: translateZ(0);
-    backface-visibility: hidden;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem clamp(1.5rem, 4vw, 2.75rem);
   }
 
-  .loop-copy {
-    display: flex;
-    flex-shrink: 0;
-  }
-
-  .loop-item {
+  .stack-item {
     display: inline-flex;
     align-items: center;
-    white-space: nowrap;
-    padding-right: 2.5rem;
+    gap: 0.55rem;
   }
 
-  .loop-logo {
-    width: 30px;
-    height: 30px;
+  .stack-logo {
+    width: 22px;
+    height: 22px;
     object-fit: contain;
     filter: grayscale(1);
-    opacity: 0.72;
-    transition: opacity 0.25s ease, transform 0.25s var(--cinematic, ease);
+    opacity: 0.6;
   }
 
-  .loop-item:hover .loop-logo {
-    opacity: 1;
-    transform: scale(1.1);
+  [data-theme='dark'] .stack-logo {
+    filter: grayscale(1) invert(1);
+    opacity: 0.75;
   }
 
-  .loop-dot {
-    color: var(--line-strong);
-    font-size: 1.4rem;
-    font-weight: 400;
-    padding-left: 2.5rem;
-  }
-
-  @keyframes loop-scroll {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .loop {
-      overflow-x: auto;
-    }
-    .loop-track {
-      animation: none;
-    }
+  .stack-name {
+    font-size: var(--step--1);
+    color: var(--ink-faint);
+    letter-spacing: 0.02em;
   }
 </style>

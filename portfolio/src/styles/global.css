@@ -44,6 +44,7 @@
   --signal-dim: #c9a86a;
   --signal-ghost: rgba(150, 105, 15, 0.08);
   --go: #177245;
+  --link: #0066cc;
 
   /* type — San Francisco first everywhere, quality fallbacks after */
   --font-display:
@@ -63,8 +64,8 @@
   --step-1: clamp(1.1rem, 1.05rem + 0.25vw, 1.25rem);
   --step-2: clamp(1.35rem, 1.25rem + 0.45vw, 1.65rem);
   --step-3: clamp(1.8rem, 1.5rem + 1.1vw, 2.4rem);
-  --step-4: clamp(2.4rem, 1.9rem + 1.8vw, 3.6rem);
-  --step-5: clamp(3rem, 2.2rem + 2.5vw, 4.8rem);
+  --step-4: clamp(2.5rem, 2rem + 2vw, 3.9rem);
+  --step-5: clamp(3.25rem, 2.4rem + 2.8vw, 5.25rem);
 
   /* spacing */
   --space-2xs: 0.25rem;
@@ -83,6 +84,58 @@
   --radius: 3px;
 
   color-scheme: light;
+}
+
+/* Midnight studio: the new default look. Every surface on the site
+   reads from these tokens, so one attribute flips the whole page. */
+[data-theme='dark'] {
+  --bg: #0d0d10;
+  --bg-raised: #16161b;
+  --line: rgba(255, 255, 255, 0.09);
+  --line-strong: rgba(255, 255, 255, 0.17);
+  --ink: #f2efe8;
+  --ink-dim: #a8a6a0;
+  --ink-faint: #6f6e69;
+  --signal: #d9a648;
+  --signal-dim: #8a6a2a;
+  --signal-ghost: rgba(217, 166, 72, 0.14);
+  --go: #4cc38a;
+  --link: #2997ff;
+
+  color-scheme: dark;
+}
+
+[data-theme='dark'] ::selection {
+  background: #3a3324;
+  color: #f2efe8;
+}
+
+/* Film grain: one fixed overlay, ultra-subtle editorial texture. */
+.grain {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+}
+
+[data-theme='dark'] .grain {
+  opacity: 0.09;
+}
+
+/* Scroll progress hairline. */
+.progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  z-index: 100;
+  background: var(--signal);
+  transform-origin: 0 50%;
+  transform: scaleX(0);
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -294,10 +347,11 @@ h1,
 h2,
 h3 {
   font-family: var(--font-display);
-  font-weight: 650;
-  line-height: 1.08;
-  letter-spacing: -0.02em;
+  font-weight: 700;
+  line-height: 1.06;
+  letter-spacing: -0.025em;
   margin: 0;
+  text-wrap: balance;
 }
 
 h2 {
@@ -342,33 +396,7 @@ p {
     0 12px 32px rgba(26, 26, 24, 0.08);
 }
 
-/* ---- text reveal ----------------------------------------------------- */
-
-.word {
-  display: inline-block;
-  opacity: 0;
-  transform: translateY(0.4em);
-  filter: blur(3px);
-  transition:
-    opacity 0.5s var(--ease, ease),
-    transform 0.5s var(--ease, ease),
-    filter 0.5s var(--ease, ease);
-}
-
-[data-text-reveal].is-revealed .word {
-  opacity: 1;
-  transform: none;
-  filter: blur(0);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .word {
-    opacity: 1;
-    transform: none;
-    filter: none;
-    transition: none;
-  }
-}
+/* ---- scroll reveals: driven by Motion, see Layout.astro ---------------- */
 
 /* ---- flow diagram ------------------------------------------------------ */
 
@@ -464,7 +492,8 @@ ul {
   --cinematic: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* Staged entrance: words rise with clip, lines fade */
+/* Staged entrance: words rise with clip. Motion drives the animation;
+   CSS holds the pre-state (and the reduced-motion end state). */
 [data-entrance] .w {
   display: inline-block;
   overflow: hidden;
@@ -474,35 +503,10 @@ ul {
   display: inline-block;
   transform: translateY(110%);
   opacity: 0;
-  transition:
-    transform 0.9s var(--cinematic, ease),
-    opacity 0.6s ease;
 }
 [data-entrance].is-in .w > span {
   transform: translateY(0);
   opacity: 1;
-}
-/* Green statement highlight: tiny paint area, transition-only —
-   comfortably 60fps. */
-[data-green] .w > span {
-  transition:
-    transform 0.9s var(--cinematic, ease),
-    opacity 0.6s ease,
-    color 0.5s ease;
-}
-[data-green] .w.lit > span {
-  color: var(--go);
-}
-[data-fade-late] {
-  opacity: 0;
-  transform: translateY(12px);
-  transition:
-    opacity 0.7s ease,
-    transform 0.7s var(--cinematic, ease);
-}
-[data-fade-late].is-in {
-  opacity: 1;
-  transform: none;
 }
 
 /* Scroll-highlight storytelling: muted -> ink word by word */
@@ -523,15 +527,7 @@ ul {
   will-change: transform, opacity;
 }
 [data-scale-in] {
-  transform: scale(0.96);
-  opacity: 0.4;
-  transition:
-    transform 0.9s var(--cinematic, ease),
-    opacity 0.7s ease;
-}
-[data-scale-in].is-in {
-  transform: scale(1);
-  opacity: 1;
+  will-change: transform, opacity;
 }
 
 /* Full-screen statement moments — pinned: the statement holds still
@@ -628,6 +624,10 @@ a:hover .link-arrow {
   background: #fafaf7;
 }
 
+[data-theme='dark'] #closing {
+  background: #111114;
+}
+
 /* Viewport-triggered phrase highlighting: phrases sit muted until
    they cross the trigger band (~middle viewport), then snap to full
    emphasis and stay there. Discrete events, not scroll scrubbing. */
@@ -644,15 +644,8 @@ a:hover .link-arrow {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  [data-entrance] .w > span,
-  [data-green] .w > span,
-  [data-fade-late],
-  [data-scale-in],
-  [data-highlight] .hw,
-  [data-trigger-highlight] .tw {
-    transition: none;
+  [data-entrance] .w > span {
     transform: none;
     opacity: 1;
-    color: var(--ink);
   }
 }

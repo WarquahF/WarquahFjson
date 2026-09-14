@@ -5,24 +5,45 @@ const homeHref = Astro.url.pathname === '/' ? '#home' : '/#home';
 ---
 
 <footer class="footer mono">
-  <p>Warquah Faiz © {year} — Designed and built by Warquah Faiz.</p>
-  <div class="footer-links">
-    <a href={social.github} target="_blank" rel="noreferrer">GitHub</a>
-    <a href={social.x} target="_blank" rel="noreferrer">X</a>
-    <a href={`mailto:${social.email}`}>Email</a>
-    <a href={homeHref}>Back to top ↑</a>
+  <div class="mega" aria-hidden="true">Warquah</div>
+  <div class="footer-row">
+    <p>Warquah Faiz © {year} — Designed and built by Warquah Faiz.</p>
+    <div class="footer-links">
+      <a href={social.github} target="_blank" rel="noreferrer">GitHub</a>
+      <a href={social.x} target="_blank" rel="noreferrer">X</a>
+      <a href={`mailto:${social.email}`}>Email</a>
+      <a href={homeHref}>Back to top ↑</a>
+    </div>
   </div>
 </footer>
 
 <style>
   .footer {
-    padding: var(--space-lg) clamp(1.25rem, 5vw, 3.5rem) var(--space-2xl);
+    padding: 0 clamp(1.25rem, 5vw, 3.5rem) var(--space-2xl);
+    font-size: var(--step--1);
+    color: var(--ink-faint);
+  }
+
+  .mega {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 0.9;
+    font-size: clamp(3.5rem, 18vw, 15rem);
+    color: var(--ink);
+    border-top: 1px solid var(--line);
+    padding-top: var(--space-xl);
+    white-space: nowrap;
+    overflow: hidden;
+    user-select: none;
+  }
+
+  .footer-row {
+    margin-top: var(--space-lg);
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     gap: 0.75rem;
-    font-size: var(--step--1);
-    color: var(--ink-faint);
   }
 
   .footer-links {
@@ -37,6 +58,6 @@ const homeHref = Astro.url.pathname === '/' ? '#home' : '/#home';
   }
 
   .footer-links a:hover {
-    color: var(--signal);
+    color: var(--link);
   }
 </style>
