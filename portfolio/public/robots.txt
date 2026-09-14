@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://warquahf35.vercel.app/sitemap-index.xml
+Sitemap: https://warquahf.github.io/sitemap-index.xml
